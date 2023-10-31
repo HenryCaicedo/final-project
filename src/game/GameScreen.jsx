@@ -36,20 +36,44 @@ const duracionGiro = 900;
 var orientation = map.orientation;
 var delay = 0;
 
-const instructions = [
-    {type: "forward", value: 1 },
-    {type: "left" },
-    {type: "forward", value: 4 },
-    {type: "right" },
-    {type: "forward", value: 6 },
-    {type: "right" },
-    {type: "forward", value: 2 },
-    {type: "right" },
-    {type: "forward", value: 4 },
-    {type: "left" },
-    {type: "forward", value: 2 },
-    {type: "left" },
-    {type: "forward", value: 6 },
+const instructions1 = [
+    { type: "forward", value: 1 },
+    { type: "left" },
+    { type: "forward", value: 4 },
+    { type: "right" },
+    { type: "forward", value: 6 },
+    { type: "right" },
+    { type: "forward", value: 2 },
+    { type: "right" },
+    { type: "forward", value: 4 },
+    { type: "left" },
+    { type: "forward", value: 2 },
+    { type: "left" },
+    { type: "forward", value: 6 },
+]
+
+const instructions2 = [
+    { type: "forward", value: 1 },
+    { type: "left" },
+    { type: "forward", value: 1 },
+    { type: "wait" },
+    { type: "forward", value: 3 },
+    { type: "right" },
+    { type: "forward", value: 1 },
+    { type: "wait" },
+    { type: "forward", value: 5 },
+    { type: "right" },
+    { type: "wait" },
+    { type: "forward", value: 2 },
+    { type: "right" },
+    { type: "forward", value: 4 },
+    { type: "left" },
+    { type: "forward", value: 2 },
+    { type: "left" },
+    { type: "forward", value: 2 },
+    { type: "wait" },
+    { type: "forward", value: 4 },
+
 ]
 
 
@@ -97,43 +121,43 @@ class TrafficLight extends Phaser.GameObjects.Container {
                 break;
         }
 
-        
 
-        this.setAngle(angle);    
+
+        this.setAngle(angle);
         this.updateColor();
 
     }
- 
 
 
-    updateColor(){
+
+    updateColor() {
         if (this.isGreen == false) {
             setTimeout(() => {
                 this.trafficLights.setTexture('traffic_lights', 2);
                 setTimeout(() => {
                     this.trafficLights.setTexture('traffic_lights', 3);
-                    this.isGreen=true;
+                    this.isGreen = true;
                     this.updateColor();
                 }, yellowDuration);
             }, colorDuration);
-        }else{
+        } else {
             setTimeout(() => {
                 this.trafficLights.setTexture('traffic_lights', 2);
                 setTimeout(() => {
                     this.trafficLights.setTexture('traffic_lights', 1);
-                    this.isGreen=false;
+                    this.isGreen = false;
                     this.updateColor();
                 }, yellowDuration);
             }, colorDuration);
         }
-           
+
     }
 
 }
 
 
 class Car extends Phaser.GameObjects.Container {
-    constructor(scene) {
+    constructor(scene, instructions) {
         super(scene);
 
         const carImg = scene.add.image(tileSize / 2 + tileSize * startColumn, tileSize / 2 + tileSize * startRow, 'car');
@@ -160,12 +184,16 @@ class Car extends Phaser.GameObjects.Container {
 
         //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser/Animations_and_tweens
         outerLoop: for (const instruction of instructions) {
+            console.log('Delay: '+delay);
             switch (instruction.type) {
                 case "right":
                     this.Derecha();
                     break;
                 case "left":
                     this.Izquierda();
+                    break;
+                case "wait":
+                    this.Esperar();
                     break;
                 default:
                     var places = this.LugaresAvanzables();
@@ -180,7 +208,10 @@ class Car extends Phaser.GameObjects.Container {
         }
     }
 
-        
+
+
+
+
     semaforoUbicadoEn(column, row) {
         for (const semaforo of trafficLightObjects) {
             if (semaforo.column == column && semaforo.row == row) {
@@ -198,50 +229,48 @@ class Car extends Phaser.GameObjects.Container {
             }
         }
     }
-    
-    semaforoEnVerde(totalTime,semaforo){
 
+    semaforoEnVerde(totalTime, semaforo) {
 
         console.log('--------------------------------------------');
-
         console.log('Tiempo para llegar al semáforo: ', totalTime);
 
-        let isRed=!semaforo.isGreen;
+        let isRed = !semaforo.isGreen;
         let upperBound;
 
-        if(isRed){
+        if (isRed) {
 
-            upperBound=colorDuration;
+            upperBound = colorDuration;
 
-            if(upperBound<totalTime){
-                upperBound+=2*(colorDuration+yellowDuration);
+            if (upperBound < totalTime) {
+                upperBound += 2 * (colorDuration + yellowDuration);
             }
-            if(upperBound<totalTime){
-                upperBound+=yellowDuration;
-                while(upperBound<=totalTime){
-                    upperBound+=2*(colorDuration+yellowDuration);
+            if (upperBound < totalTime) {
+                upperBound += yellowDuration;
+                while (upperBound <= totalTime) {
+                    upperBound += 2 * (colorDuration + yellowDuration);
                 }
             }
-        }else{
+        } else {
 
-            upperBound=2*colorDuration+yellowDuration;
+            upperBound = 2 * colorDuration + yellowDuration;
 
-            if(upperBound<totalTime){
-                upperBound+=2*colorDuration+3*yellowDuration;
+            if (upperBound < totalTime) {
+                upperBound += 2 * colorDuration + 3 * yellowDuration;
             }
-            if(upperBound<totalTime){
-                while(upperBound<totalTime){
-                    upperBound+=2*(colorDuration+yellowDuration);
+            if (upperBound < totalTime) {
+                while (upperBound < totalTime) {
+                    upperBound += 2 * (colorDuration + yellowDuration);
                 }
             }
 
         }
 
-        let lowerBound = upperBound-colorDuration;
+        let lowerBound = upperBound - colorDuration;
         if (lowerBound <= totalTime && totalTime <= upperBound) {
             isRed = true;
             //console.log('Tiempo para que el semáforo cambie: ', upperBound-totalTime);
-        }else{
+        } else {
             isRed = false;
         }
         return !isRed;
@@ -253,13 +282,13 @@ class Car extends Phaser.GameObjects.Container {
         let column = currentColumn;
         let c = 0;
         let tempDelay = delay;
-    
+
         switch (orientation) {
             case 'north':
                 while ([1, 3, 4].includes(matrix[row - 1][column])) {
                     if (this.semaforoUbicadoEn(column, row - 1)) {
                         var semaforo = this.getSemaforo(column, row - 1)
-                        if(this.semaforoEnVerde(tempDelay,semaforo) == false){
+                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
                             break;
                         }
                     }
@@ -275,7 +304,7 @@ class Car extends Phaser.GameObjects.Container {
                 while ([1, 5, 6].includes(matrix[row + 1][column])) {
                     if (this.semaforoUbicadoEn(column, row + 1)) {
                         var semaforo = this.getSemaforo(column, row + 1)
-                        if(this.semaforoEnVerde(tempDelay,semaforo) == false){
+                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
                             break;
                         }
                     }
@@ -290,8 +319,8 @@ class Car extends Phaser.GameObjects.Container {
             case 'east':
                 while ([2, 4, 6].includes(matrix[row][column + 1])) {
                     if (this.semaforoUbicadoEn(column + 1, row)) {
-                        var semaforo = this.getSemaforo(column+1, row)
-                        if(this.semaforoEnVerde(tempDelay,semaforo) == false){
+                        var semaforo = this.getSemaforo(column + 1, row)
+                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
                             break;
                         }
                     }
@@ -306,8 +335,8 @@ class Car extends Phaser.GameObjects.Container {
             case 'west':
                 while ([2, 3, 5].includes(matrix[row][column - 1])) {
                     if (this.semaforoUbicadoEn(column - 1, row)) {
-                        var semaforo = this.getSemaforo(column-1, row)
-                        if(this.semaforoEnVerde(tempDelay,semaforo) == false){
+                        var semaforo = this.getSemaforo(column - 1, row)
+                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
                             break;
                         }
                     }
@@ -322,7 +351,7 @@ class Car extends Phaser.GameObjects.Container {
         }
         return c;
     }
-    
+
 
     Avanzar(places) {
         const duration = places * carSpeed;
@@ -407,6 +436,97 @@ class Car extends Phaser.GameObjects.Container {
 
         delay += duracionGiro;
     }
+
+
+    getCambioDeColorTime(semaforo) {
+
+        let isRed = !semaforo.isGreen;
+        let upperBound;
+
+        if (isRed) {
+            upperBound = colorDuration;
+
+            if (upperBound < delay) {
+                upperBound += 2 * (colorDuration + yellowDuration);
+            }
+            if (upperBound < delay) {
+                upperBound += yellowDuration;
+                while (upperBound <= delay) {
+                    upperBound += 2 * (colorDuration + yellowDuration);
+                }
+            }
+        } else {
+
+            upperBound = 2 * colorDuration + yellowDuration;
+
+            if (upperBound < delay) {
+                upperBound += 2 * colorDuration + 3 * yellowDuration;
+            }
+            if (upperBound < delay) {
+                while (upperBound < delay) {
+                    upperBound += 2 * (colorDuration + yellowDuration);
+                }
+            }
+
+        }
+
+        return upperBound-delay;
+    }
+
+    
+    Esperar() {
+        let duration = 0;
+        switch (orientation) {
+            case 'north':
+                if (this.semaforoUbicadoEn(currentColumn, currentRow - 1)) {
+                    let semaforo = this.getSemaforo(currentColumn, currentRow - 1);
+                    if (this.semaforoEnVerde(delay, semaforo) == false) {
+                        console.log('Semáforo en rojo.');
+                        duration = this.getCambioDeColorTime(semaforo)+1;
+                    } 
+                }
+            break;
+            case 'south':
+                if (this.semaforoUbicadoEn(currentColumn, currentRow + 1)) {
+                    let semaforo = this.getSemaforo(currentColumn, currentRow + 1);
+                    if (this.semaforoEnVerde(delay, semaforo) == false) {
+                        console.log('Semáforo en rojo.');
+                        duration = this.getCambioDeColorTime(semaforo)+1;
+                    } 
+                }
+            break;
+            case 'east':
+                if (this.semaforoUbicadoEn(currentColumn + 1, currentRow)) {
+                    let semaforo = this.getSemaforo(currentColumn + 1, currentRow);
+                    if (this.semaforoEnVerde(delay, semaforo) == false) {
+                        console.log('Semáforo en rojo.');
+                        duration = this.getCambioDeColorTime(semaforo)+1;
+                    } 
+                }
+            break;
+            case 'west':
+                if (this.semaforoUbicadoEn(currentColumn - 1, currentRow)) {
+                    let semaforo = this.getSemaforo(currentColumn - 1, currentRow);
+                    if (this.semaforoEnVerde(delay, semaforo) == false) {
+                        console.log('Semáforo en rojo.');
+                        duration = this.getCambioDeColorTime(semaforo)+1;
+                    } 
+                }
+            break;
+        }
+
+        console.log('Tiempo para que cambie a verde: '+duration);
+
+        this.scene.tweens.add({
+            targets: this,
+            duration: duration,
+            delay: delay,
+        });
+        delay += duration;
+        
+    }
+
+
 
     Shake() {
         // Define the shake animation
@@ -496,7 +616,7 @@ class CarScene extends Phaser.Scene {
 
 
     create() {
-        
+
 
         // Background
         this.drawBackground();
@@ -510,7 +630,7 @@ class CarScene extends Phaser.Scene {
             trafficLightObjects.push(new TrafficLight(this, object.column, object.row, object.orientation, object.value, object.isGreen));
         }
 
-        new Car(this);
+        new Car(this, instructions2);
 
 
 

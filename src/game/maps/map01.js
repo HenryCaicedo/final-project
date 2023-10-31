@@ -14,9 +14,9 @@ const map01 = {
   finish: [4, 3],
   orientation: "east",
   trafficLights: [
-    {row: 3, column: 1, orientation: 'north', value: 1, isGreen: true },
-    {row: 1, column: 3, orientation: 'east', value: -1, isGreen: false },
-    {row: 2, column: 7, orientation: 'south', value: 1, isGreen: true },
+    {row: 3, column: 1, orientation: 'north', value: 1, isGreen: false },
+    //{row: 1, column: 3, orientation: 'east', value: -1, isGreen: false },
+    {row: 2, column: 7, orientation: 'south', value: 1, isGreen: false },
     {row: 5, column: 6, orientation: 'east', value: 1, isGreen: false },
 ]
 };
