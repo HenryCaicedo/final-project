@@ -3,12 +3,18 @@ import UnitContainer from "./UnitContainer";
 
 function Content() {
   return (
-    <div className="bg-bluen rounded-5 shadow-md p-5 max-w-full">
-      <div className="flex flex-col gap-10">
+    <div className="relative left-1/2 transform -translate-x-1/2">
+      <div className="flex flex-col gap-5">
         <UnitContainer title="Unidad 1" />
         <UnitContainer title="Unidad 2" />
+        <UnitContainer title="Unidad 3" />
+        <UnitContainer title="Unidad 4" />
+        <UnitContainer title="Unidad 5" />
+        <UnitContainer title="Unidad 6" />
+        <UnitContainer title="Unidad 7" />
       </div>
     </div>
+
   );
 }
 export default Content;
