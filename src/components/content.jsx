@@ -9,9 +9,6 @@ function Content() {
         <UnitContainer title="Unidad 2" />
         <UnitContainer title="Unidad 3" />
         <UnitContainer title="Unidad 4" />
-        <UnitContainer title="Unidad 5" />
-        <UnitContainer title="Unidad 6" />
-        <UnitContainer title="Unidad 7" />
       </div>
     </div>
 
