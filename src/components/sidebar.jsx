@@ -4,12 +4,11 @@ import React from "react";
 
 
 
-
 function SidebarHeader() {
   return (
-    <div className="p-4 flex items-center w-full space-x-2">
-      <div className="text-black mr-4" size={50}><CarFront color="darkblue" size={42} /></div>
-      <div className="text-2xl font-semibold text-blue-900">AppName</div>
+    <div className="px-8 flex items-center w-full space-x-1">
+      <div className="text-black mr-4" size={50}><CarFront color="#5686E1" size={42} /></div>
+      <div className="text-2xl font-bold text-[#5686E1]">AppName</div>
     </div>
   );
 }
@@ -39,7 +38,7 @@ function Sidebar({ profileImage, settingsImage }) {
           <div className="px-5">
             <Tab icon={<Icon icon="flat-color-icons:businesswoman" />} label="My account" />
             <Tab icon={<Icon icon="flat-color-icons:graduation-cap" />} label="Learn" />
-            <Tab icon={<Icon icon="flat-color-icons:settings" />} label="Settings" />
+            <Tab icon={<Icon icon="flat-color-icons:automotive" />} label="Settings" />
           </div>
 
         </div>

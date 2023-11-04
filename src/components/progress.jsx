@@ -1,6 +1,7 @@
 import React from "react";
-import Sidebar from "./sidebar.jsx";
-import Content from "./content.jsx";
+import Sidebar from "./Sidebar.jsx";
+import TabContent from "./TabContent.jsx";
+import LearnTab from "./LearnComponent/LearnTab.jsx";
 
 function Progress() {
   return (
@@ -13,7 +14,9 @@ function Progress() {
       </div>
       <div className="w-full sm:w-2/3 md:w-3/4 lg:w-7/10">
         <div style={{ height: "100vh", overflowY: "scroll" }}>
-          <Content />
+          <TabContent title={"Learn"}>
+            <LearnTab/>
+          </TabContent>
         </div>
       </div>
     </div>
