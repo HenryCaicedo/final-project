@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import Lesson from "./Lessons";
 const activitiesFolderPath = "../game"; // Replace with the actual path
 
-function UnitContainer({ title }) {
+function UnitContainer({ title, color='sky-500'}) {
   const jsFiles = getJSFilesInFolder(activitiesFolderPath);
 
   function getJSFilesInFolder(folderPath) {
     // .
-    // Queda pendiente discutir si es mejor esto en progreso o en la pantalla que carga.
+    // Queda pendiente discutir si es mejsor esto en progreso o en la pantalla que carga.
     //
     return ["Driving.jsx", "activity1.js"];
   }
@@ -23,6 +23,11 @@ function UnitContainer({ title }) {
       </Suspense>
     );
   };
+
+  color = 'bg-'+color;
+  //color = 'bg-orange-400';
+  console.log(color);
+
 
 
   /*
@@ -59,25 +64,29 @@ function UnitContainer({ title }) {
 
     <div>
 
-      <div class="flex items-center justify-center">
+      <div className="flex items-center justify-center">
 
-        <div class="flex border shadow-lg p-10 flex-col space-y-4 rounded-3xl bg-slate-50">
-          <h2 className="text-bluen text-4xl font-bold font-['Open Sans'] drop-shadow">
-            {title}
-          </h2>
-          <div/>
-          <div className="flex justify-center space-x-4">
+        <div className="flex border shadow-md p-10 flex-col space-y-2 rounded-[45px] bg-zinc-50">
+          <div className={`${color} rounded-3xl py-5 px-7`}>
+            <h2 className="text-white text-2xl font-semibold font-['Open Sans']">
+              {title}
+            </h2>
+          </div>
+
+          <div />
+          <div className="flex justify-center align-bottom space-x-4">
             <Lesson number={1} />
             <Lesson number={2} />
             <Lesson number={3} />
             <Lesson number={4} />
           </div>
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center  align-bottom space-x-4">
             <Lesson number={5} />
             <Lesson number={6} />
             <Lesson number={7} />
             <Lesson number={8} />
           </div>
+          
         </div>
       </div>
     </div>
