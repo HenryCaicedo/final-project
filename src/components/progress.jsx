@@ -13,7 +13,7 @@ function Progress() {
         />
       </div>
       <div className="w-full sm:w-2/3 md:w-3/4 lg:w-7/10">
-        <div style={{ height: "100vh", overflowY: "scroll" }}>
+        <div style={{ height: "100vh"}}>
           <TabContent title={"Learn"}>
             <LearnTab/>
           </TabContent>

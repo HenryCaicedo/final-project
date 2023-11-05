@@ -2,7 +2,7 @@ import React from "react";
 
 function TabContent({ title, children }) {
   return (
-    <div className="p-[50px] h-full">
+    <div className="py-[50px] px-[80px] h-full">
       <div className="bg-white px-10 h-full rounded-[48px] border-4 border-gray-300">
         {/* Título */}
         <div className="h-1/6 w-full flex flex-col justify-center border-b-4 border-gray-300">

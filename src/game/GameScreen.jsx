@@ -73,7 +73,6 @@ const instructions2 = [
     { type: "forward", value: 2 },
     { type: "wait" },
     { type: "forward", value: 4 },
-
 ]
 
 
