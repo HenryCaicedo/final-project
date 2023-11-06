@@ -47,6 +47,7 @@ function UnitContainer({ title, color = "purple-500", description }) {
                 visible={showTips}
                 content={description}
                 closeGuide={toggleTips}
+                title={title}
               />
             </div>
           </div>

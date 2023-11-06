@@ -9,7 +9,6 @@ export default function LearnTab() {
         color="purple-400"
         description={
           <div>
-            <div className="text-3xl">Unidad 1: Basicos</div>
             <div>
               El contenido de la unidad está enfocado en enseñar las bases de
               los conceptos.
