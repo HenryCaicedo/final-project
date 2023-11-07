@@ -1,4 +1,5 @@
 import { CarFront, LogOutIcon } from "lucide-react";
+import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import React, { useState } from "react";
 
@@ -13,20 +14,24 @@ function SidebarHeader() {
     </div>
   );
 }
-function Tab({ icon, label, showTooltips, tooltipContent, onClick }) {
+
+function Tab({ icon, label, showTooltips, tooltipContent, onClick, route }) {
   return (
-    <button
-      className="relative group px-4 py-3 flex items-center w-full hover:bg-zinc-200 hover:rounded-lg space-x-2"
-      onClick={onClick} // Add onClick handler to toggle tooltips
-    >
-      <div className="text-[4.5vh] text-black mr-4">{icon}</div>
-      <div className="text-xl font-semibold text-black">{label}</div>
-      {showTooltips && (
-        <div className="hidden group-hover:block absolute bottom-8 left-full w-max p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
-          {tooltipContent}
-        </div>
-      )}
-    </button>
+    <Link to='/'>
+      <button
+        className="relative group px-4 py-3 flex items-center w-full hover:bg-zinc-200 hover:rounded-lg space-x-2"
+        onClick={onClick}
+      >
+        <div className="text-[4.5vh] text-black mr-4">{icon}</div>
+        <div className="text-xl font-semibold text-black">{label}</div>
+        {showTooltips && (
+          <div className="hidden group-hover:block absolute bottom-8 left-full w-max p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
+            {tooltipContent}
+          </div>
+        )}
+      </button>
+    </Link>
+
   );
 }
 
@@ -37,7 +42,7 @@ function Tab({ icon, label, showTooltips, tooltipContent, onClick }) {
 
 function Sidebar({ profileImage, settingsImage }) {
   const [showTooltips, setShowTooltips] = useState(false);
-  
+
 
 
   const toggleTooltips = () => {
@@ -59,7 +64,7 @@ function Sidebar({ profileImage, settingsImage }) {
               showTooltips={showTooltips}
               tooltipContent={
                 <div>
-                  
+
                 </div>
               }
             />
@@ -85,19 +90,19 @@ function Sidebar({ profileImage, settingsImage }) {
               }
               showTooltips={showTooltips}
             /><Tab
-            icon={<Icon icon="flat-color-icons:info"/>} 
-            label="Information"
-            showTooltips={showTooltips}
-            onClick={toggleTooltips}
-            tooltipContent={
-              <div>
-                ¡Haz click aquí para desactivar las descripciones de ayuda!
-              </div>
-            }
-          />
-          
-          
-          
+              icon={<Icon icon="flat-color-icons:info" />}
+              label="Information"
+              showTooltips={showTooltips}
+              onClick={toggleTooltips}
+              tooltipContent={
+                <div>
+                  ¡Haz click aquí para desactivar las descripciones de ayuda!
+                </div>
+              }
+            />
+
+
+
           </div>
         </div>
         <div className="border-t-2 border-gray-200">
@@ -107,6 +112,7 @@ function Sidebar({ profileImage, settingsImage }) {
               label="Log out"
               tooltip="Log out of your account"
               showTooltips={showTooltips}
+              route='/'
             />
           </div>
         </div>

@@ -8,6 +8,7 @@ import Driving from "./game/Driving.jsx";
 import Home from "./components/Home.jsx";
 import LoginScreen from "./components/AuthComponents/LoginScreen.jsx";
 import SignUpScreen from "./components/AuthComponents/SignUpScreen.jsx";
+import HomeScreen from "./components/HomeComponent/HomeScreen.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
         <Route>
           <Route path="/app" element={<Driving />} />
           <Route path="/progress" element={<Progress />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomeScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/signup" element={<SignUpScreen />} />
         </Route>
