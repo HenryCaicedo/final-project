@@ -2,9 +2,11 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import GameScreen from "./GameScreen";
 import DndComponent from "./Dnd";
-import { X } from "lucide-react";
+import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle } from "lucide-react";
 
 
+
+// NAVBAR
 
 function CloseButton() {
   return (
@@ -18,11 +20,17 @@ function CloseButton() {
 }
 
 
-function InstructionTool({ children }) {
+function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = '', icon = <Banana /> }) {
   return (
-    <div className="rounded-2xl bg-[#ececec] py-2 px-5 mx-3 my-3 font-semibold text-lg">
-      {children}
-    </div>
+    <button className={`flex rounded-2xl py-2 px-5 mx-2 my-3 font-semibold text-lg items-center space-x-3 hover:bg-gray-200 ${bgColor} ${borderColor}`}>
+      <div className="flex items-center">
+        {icon}
+      </div>
+      <div className="flex-grow">
+        {children}
+      </div>
+    </button>
+
   )
 }
 
@@ -32,9 +40,9 @@ function InstructionTool({ children }) {
 function InstructionToolBox() {
   return (
     <div className="border-2 border-gray-300 rounded-3xl flex align-middle justify-center bg-white px-2">
-      <InstructionTool>Avanzar</InstructionTool>
-      <InstructionTool>Izquierda</InstructionTool>
-      <InstructionTool>Derecha</InstructionTool>
+      <InstructionTool icon={<ChevronsRight />}>Avanzar</InstructionTool>
+      <InstructionTool icon={<CornerUpLeft />}>Izquierda</InstructionTool>
+      <InstructionTool icon={<CornerUpRight />}>Derecha</InstructionTool>
       <InstructionTool>Condicional</InstructionTool>
     </div>
   )
@@ -52,6 +60,10 @@ function NavBar() {
   );
 }
 
+
+
+// GAME PANEL
+
 function GamePanel() {
   return (
     <div className="bg-white w-full h-full border-2 border-gray-300 rounded-3xl flex items-center justify-center">
@@ -63,8 +75,47 @@ function GamePanel() {
 
 function CodePanel() {
   return (
-    <div className="bg-white w-full h-full border-2 border-gray-300 rounded-3xl">
+    <div className="bg-white w-full h-full border-2 border-gray-300 rounded-3xl overflow-hidden">
+      <RunCodeBar />
       <DndComponent />
+    </div>
+  )
+}
+
+
+// CODE PANEL
+
+function RunCodeButton() {
+
+  const play = <Play/>
+  const stop = <StopCircle/>
+
+  return (
+
+    <button className="bg-gray-200 py-2 px-3 rounded-2xl text-black font-medium flex space-x-2
+    hover:bg-gray-300">
+      <div className="flex items-center">
+        {play}
+      </div>
+      <div className="flex-grow">
+        Ejecutar
+      </div>
+      
+    </button>
+
+  )
+}
+
+function RunCodeBar() {
+  return (
+    <div className="w-full flex py-3 px-8 items-center border-b-2">
+      <div className="w-1/2 font-medium text-xl">
+        Código
+      </div>
+      <div className="w-1/2 flex justify-end">
+        <RunCodeButton />
+      </div>
+
     </div>
   )
 }
