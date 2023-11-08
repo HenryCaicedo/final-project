@@ -656,7 +656,7 @@ class GameScreen extends Component {
 
     render() {
         return (
-            <div id="phaser-container" ></div>
+            <div id="phaser-container" className='rounded-xl border-[4px]'></div>
         );
     }
 }

@@ -30,7 +30,7 @@ function UnitContainer({ title, color = "purple-500", description }) {
     );
   };
 
-  var str = "bg-sky-500 rounded-3xl py-5 px-7";
+  var str = "bg-sky-500 rounded-3xl py-5 px-7 flex";
   console.log(str);
 
   return (

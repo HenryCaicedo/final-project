@@ -44,7 +44,7 @@ function DndComponent() {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <h1 className="text-2xl font-bold">Instructions</h1>
+          <h1 className="text-2xl font-bold">Código</h1>
           <SortableContext
             items={instruction}
             strategy={verticalListSortingStrategy}
