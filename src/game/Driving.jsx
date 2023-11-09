@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import GameScreen from "./GameScreen";
 import DndComponent from "./Dnd";
-import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle } from "lucide-react";
+import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle, Eye } from "lucide-react";
 
 
 
@@ -20,9 +20,13 @@ function CloseButton() {
 }
 
 
-function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = '', icon = <Banana /> }) {
+function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana /> }) {
+
+
   return (
-    <button className={`flex rounded-2xl py-2 px-5 mx-2 my-3 font-semibold text-lg items-center space-x-3 hover:bg-gray-200 ${bgColor} ${borderColor}`}>
+    <button className={`flex rounded-2xl py-2 px-5 mx-2 my-3 font-semibold text-lg items-center space-x-3 border-4
+     hover:bg-gray-100 hover:border-gray-200
+    ${bgColor} ${borderColor}`}>
       <div className="flex items-center">
         {icon}
       </div>
@@ -40,10 +44,10 @@ function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = '',
 function InstructionToolBox() {
   return (
     <div className="border-2 border-gray-300 rounded-3xl flex align-middle justify-center bg-white px-2">
-      <InstructionTool icon={<ChevronsRight />}>Avanzar</InstructionTool>
-      <InstructionTool icon={<CornerUpLeft />}>Izquierda</InstructionTool>
-      <InstructionTool icon={<CornerUpRight />}>Derecha</InstructionTool>
-      <InstructionTool>Condicional</InstructionTool>
+      <InstructionTool icon={<ChevronsRight />} bgColor="bg-pink-100" borderColor="border-pink-200">Avanzar</InstructionTool>
+      <InstructionTool icon={<CornerUpLeft />} bgColor="bg-blue-100" borderColor="border-blue-200">Izquierda</InstructionTool>
+      <InstructionTool icon={<CornerUpRight />} bgColor="bg-green-100" borderColor="border-green-200">Derecha</InstructionTool>
+      <InstructionTool icon={<Eye />} bgColor="bg-orange-100" borderColor="border-orange-200">Observar</InstructionTool>
     </div>
   )
 }
@@ -87,8 +91,8 @@ function CodePanel() {
 
 function RunCodeButton() {
 
-  const play = <Play/>
-  const stop = <StopCircle/>
+  const play = <Play />
+  const stop = <StopCircle />
 
   return (
 
@@ -100,7 +104,7 @@ function RunCodeButton() {
       <div className="flex-grow">
         Ejecutar
       </div>
-      
+
     </button>
 
   )
@@ -113,7 +117,9 @@ function RunCodeBar() {
         Código
       </div>
       <div className="w-1/2 flex justify-end">
-        <RunCodeButton />
+        {/*<RunCodeButton />*/}
+        <button className="bg-gray-200 py-2 px-3 rounded-2xl text-black font-medium flex space-x-2
+    hover:bg-gray-300" id="run_code">EJECUTAR</button>
       </div>
 
     </div>

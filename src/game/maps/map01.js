@@ -10,14 +10,15 @@ const map01 = {
   ],
 
   type: 1,
-  start: [5, 0],
-  finish: [4, 3],
+  start: { row: 5, column: 0},
+  finish: { row: 5, column: 9},
   orientation: "east",
+  stars: {one: 5, two: 10, three: 15},
   trafficLights: [
-    {row: 3, column: 1, orientation: 'north', value: 1, isGreen: false },
+    //{row: 3, column: 1, orientation: 'north', value: 1, isGreen: false },
     //{row: 1, column: 3, orientation: 'east', value: -1, isGreen: false },
-    {row: 2, column: 7, orientation: 'south', value: 1, isGreen: false },
-    {row: 5, column: 6, orientation: 'east', value: 1, isGreen: false },
+    //{row: 2, column: 7, orientation: 'south', value: 1, isGreen: false },
+    //{row: 5, column: 6, orientation: 'east', value: 1, isGreen: false },
 ]
 };
 

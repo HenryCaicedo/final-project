@@ -10,8 +10,8 @@ console.clear();
 const map = map01;
 
 const matrix = map.matrix;
-const startRow = map.start[0];
-const startColumn = map.start[1];
+const startRow = map.start.row;
+const startColumn = map.start.column;
 
 
 
@@ -176,14 +176,21 @@ class Car extends Phaser.GameObjects.Container {
 
         carImg.setAngle(angle)
         this.add(carImg)
+        this.instructions = instructions;
 
         this.body = carImg;
 
         scene.add.existing(this);
 
         //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser/Animations_and_tweens
-        outerLoop: for (const instruction of instructions) {
-            console.log('Delay: '+delay);
+        this.EjecutarInstrucciones();
+
+    }
+
+
+    EjecutarInstrucciones() {
+        outerLoop: for (const instruction of this.instructions) {
+            //console.log('Delay: ' + delay);
             switch (instruction.type) {
                 case "right":
                     this.Derecha();
@@ -199,16 +206,13 @@ class Car extends Phaser.GameObjects.Container {
                     if (places >= instruction.value) {
                         this.Avanzar(instruction.value);
                     } else {
-                        this.Avanzar(places + 0.7)
+                        this.Avanzar(places)
                         console.log("Error de ejecución.")
                         break outerLoop;
                     }
             }
         }
     }
-
-
-
 
 
     semaforoUbicadoEn(column, row) {
@@ -469,10 +473,10 @@ class Car extends Phaser.GameObjects.Container {
 
         }
 
-        return upperBound-delay;
+        return upperBound - delay;
     }
 
-    
+
     Esperar() {
         let duration = 0;
         switch (orientation) {
@@ -481,40 +485,40 @@ class Car extends Phaser.GameObjects.Container {
                     let semaforo = this.getSemaforo(currentColumn, currentRow - 1);
                     if (this.semaforoEnVerde(delay, semaforo) == false) {
                         console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo)+1;
-                    } 
+                        duration = this.getCambioDeColorTime(semaforo) + 1;
+                    }
                 }
-            break;
+                break;
             case 'south':
                 if (this.semaforoUbicadoEn(currentColumn, currentRow + 1)) {
                     let semaforo = this.getSemaforo(currentColumn, currentRow + 1);
                     if (this.semaforoEnVerde(delay, semaforo) == false) {
                         console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo)+1;
-                    } 
+                        duration = this.getCambioDeColorTime(semaforo) + 1;
+                    }
                 }
-            break;
+                break;
             case 'east':
                 if (this.semaforoUbicadoEn(currentColumn + 1, currentRow)) {
                     let semaforo = this.getSemaforo(currentColumn + 1, currentRow);
                     if (this.semaforoEnVerde(delay, semaforo) == false) {
                         console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo)+1;
-                    } 
+                        duration = this.getCambioDeColorTime(semaforo) + 1;
+                    }
                 }
-            break;
+                break;
             case 'west':
                 if (this.semaforoUbicadoEn(currentColumn - 1, currentRow)) {
                     let semaforo = this.getSemaforo(currentColumn - 1, currentRow);
                     if (this.semaforoEnVerde(delay, semaforo) == false) {
                         console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo)+1;
-                    } 
+                        duration = this.getCambioDeColorTime(semaforo) + 1;
+                    }
                 }
-            break;
+                break;
         }
 
-        console.log('Tiempo para que cambie a verde: '+duration);
+        console.log('Tiempo para que cambie a verde: ' + duration);
 
         this.scene.tweens.add({
             targets: this,
@@ -522,7 +526,7 @@ class Car extends Phaser.GameObjects.Container {
             delay: delay,
         });
         delay += duration;
-        
+
     }
 
 
@@ -613,8 +617,20 @@ class CarScene extends Phaser.Scene {
     }
 
 
-
     create() {
+
+        const externalButton = document.getElementById("run_code");
+
+        if (externalButton) {
+            externalButton.addEventListener("click", () => {
+                delay = 0;
+                currentRow = startRow;
+                currentColumn = startColumn;
+                const carro = new Car(this, instructions1);
+
+            });
+        }
+
 
 
         // Background
@@ -629,8 +645,7 @@ class CarScene extends Phaser.Scene {
             trafficLightObjects.push(new TrafficLight(this, object.column, object.row, object.orientation, object.value, object.isGreen));
         }
 
-        new Car(this, instructions2);
-
+        //const carro = new Car(this, instructions2);
 
 
     }
@@ -640,7 +655,9 @@ class CarScene extends Phaser.Scene {
 
 class GameScreen extends Component {
     componentDidMount() {
-        // Create a Phaser game configuration
+
+
+
         const config = {
             type: Phaser.AUTO,
             width: matrix[0].length * tileSize,
@@ -656,7 +673,7 @@ class GameScreen extends Component {
 
     render() {
         return (
-            <div id="phaser-container" className='rounded-xl border-[6px] overflow-hidden'></div>
+            <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
         );
     }
 }
