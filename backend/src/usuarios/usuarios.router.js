@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { createUsuario, deleteUsuario, readUsuario, updateUsuario } from './usuarios.controller';
+import { createUsuario, deleteUsuario,readUsuario, updateUsuario, loginUsuario } from './usuarios.controller';
 
 const routerUsuarios = Router();
 
-//Create
+// Create
 routerUsuarios.post('/signup', createUsuario);
+// Login
+routerUsuarios.post('/login', loginUsuario)
 //Read 
 routerUsuarios.get('/', readUsuario);
 //Update
