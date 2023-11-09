@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthNavBar from './AuthNavBar';
 import TextField from './TextField';
-import { MainButton } from '../Theme/ThemeComponents';z
+import { MainButton } from '../Theme/ThemeComponents';
 
 export default function SignUp() {
     return (
