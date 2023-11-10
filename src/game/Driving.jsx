@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import GameScreen from "./GameScreen";
 import DndComponent from "./Dnd";
 import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle, Eye } from "lucide-react";
-
+import { addInstruction } from "./instructionList";
 
 
 // NAVBAR
@@ -11,7 +11,7 @@ import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play
 function CloseButton() {
   return (
     <Link to="/progress">  {/* Use the Link component with the "to" attribute */}
-      <button className="p-3 border-gray-400 border-2 border-b-4 rounded-full">
+      <button className="p-3 border-gray-400 border-2 rounded-full hover:bg-gray-200 focus:bg-gray-300">
         <X color='gray' size={32} />
       </button>
     </Link>
@@ -20,11 +20,15 @@ function CloseButton() {
 }
 
 
-function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana /> }) {
+function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana /> , type}) {
 
+  const handleClick = () => {
+    addInstruction(type)
+    console.log('Component pressed!');
+  };
 
   return (
-    <button className={`flex rounded-2xl py-2 px-5 mx-2 my-3 font-semibold text-lg items-center space-x-3 border-4
+    <button onClick={handleClick} className={`flex rounded-2xl py-2 px-5 mx-2 my-3 font-semibold text-lg items-center space-x-3 border-4
      hover:bg-gray-100 hover:border-gray-200
     ${bgColor} ${borderColor}`}>
       <div className="flex items-center">
@@ -42,12 +46,13 @@ function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'bo
 
 // TO DO: Un color por instrucción
 function InstructionToolBox() {
+  
   return (
     <div className="border-2 border-gray-300 rounded-3xl flex align-middle justify-center bg-white px-2">
-      <InstructionTool icon={<ChevronsRight />} bgColor="bg-pink-100" borderColor="border-pink-200">Avanzar</InstructionTool>
-      <InstructionTool icon={<CornerUpLeft />} bgColor="bg-blue-100" borderColor="border-blue-200">Izquierda</InstructionTool>
-      <InstructionTool icon={<CornerUpRight />} bgColor="bg-green-100" borderColor="border-green-200">Derecha</InstructionTool>
-      <InstructionTool icon={<Eye />} bgColor="bg-orange-100" borderColor="border-orange-200">Observar</InstructionTool>
+      <InstructionTool type='forward' icon={<ChevronsRight />} bgColor="bg-pink-100" borderColor="border-pink-200">Avanzar</InstructionTool>
+      <InstructionTool type='left' icon={<CornerUpLeft />} bgColor="bg-blue-100" borderColor="border-blue-200">Izquierda</InstructionTool>
+      <InstructionTool type='right' icon={<CornerUpRight />} bgColor="bg-green-100" borderColor="border-green-200">Derecha</InstructionTool>
+      <InstructionTool type='wait' icon={<Eye />} bgColor="bg-orange-100" borderColor="border-orange-200">Observar</InstructionTool>
     </div>
   )
 }
@@ -118,8 +123,11 @@ function RunCodeBar() {
       </div>
       <div className="w-1/2 flex justify-end">
         {/*<RunCodeButton />*/}
-        <button className="bg-gray-200 py-2 px-3 rounded-2xl text-black font-medium flex space-x-2
-    hover:bg-gray-300" id="run_code">EJECUTAR</button>
+        <button className="bg-gray-100 py-2 px-3 rounded-2xl text-black font-medium flex space-x-2 items-center border-[3px]
+    hover:bg-gray-200" id="run_code">
+          <Play />
+          Ejecutar
+        </button>
       </div>
 
     </div>

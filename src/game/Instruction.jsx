@@ -16,7 +16,8 @@ function Instruction({ user: instruction }) {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="bg-white p-4 rounded-md shadow-md my-2 text-slate-950"
+      className="flex bg-white rounded-2xl py-2 px-5 font-semibold text-lg items-center space-x-3 border-[3px] 
+      hover:bg-gray-100 hover:border-gray-200"
     >
       <h1>{instruction.type}</h1>
       

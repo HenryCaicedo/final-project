@@ -6,18 +6,12 @@ import {
 } from "@dnd-kit/sortable";
 import { useState } from "react";
 import Instruction from "./Instruction";
+import { getInstructions, updateInstructions } from "./instructionList";
+
+var instructionList = getInstructions();
 
 function DndComponent() {
-  const [instruction, setInstruction] = useState([
-    { id: 1, type: "forward", value: 9 },
-    { id: 2, type: "right" },
-    { id: 3, type: "forward", value: 1 },
-    { id: 4, type: "right" },
-    { id: 5, type: "forward", value: 9 },
-    { id: 6, type: "left" },
-    { id: 7, type: "forward", value: 1 },
-    { id: 8, type: "left" }
-  ]);
+  const [instruction, setInstruction] = useState(instructionList);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -29,7 +23,8 @@ function DndComponent() {
         const oldIndex = people.findIndex((instruction) => instruction.id === active.id);
         const newIndex = people.findIndex((instruction) => instruction.id === over.id);
 
-        console.log(arrayMove(people, oldIndex, newIndex));
+        instructionList = arrayMove(people, oldIndex, newIndex);
+        updateInstructions(instructionList)
         return arrayMove(people, oldIndex, newIndex);
       });
     }
@@ -39,7 +34,7 @@ function DndComponent() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="w-4/6">
+      <div className="w-5/6 py-3 space-y-1">
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
@@ -49,7 +44,7 @@ function DndComponent() {
             strategy={verticalListSortingStrategy}
           >
             {instruction.map((user) => (
-              <Instruction key={user.id} user={user} />
+              <Instruction key={user.id} user={user}/>
             ))}
           </SortableContext>
         </DndContext>

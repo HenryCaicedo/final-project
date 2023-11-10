@@ -3,6 +3,8 @@ import Phaser from 'phaser';
 //import Car from './game/phaser_car'
 import map01 from './maps/map01';
 import map02 from './maps/map02';
+import { fromJSON } from 'postcss';
+import { getInstructions, updateInstructions } from "./instructionList";
 
 console.clear();
 
@@ -12,7 +14,7 @@ const map = map01;
 const matrix = map.matrix;
 const startRow = map.start.row;
 const startColumn = map.start.column;
-
+const initialOrientation = map.orientation;
 
 
 
@@ -33,10 +35,19 @@ var currentColumn = startColumn;
 const carSpeed = 350; //duration
 const duracionGiro = 900;
 
-var orientation = map.orientation;
+var currentOrientation = initialOrientation;
 var delay = 0;
 
-const instructions1 = [
+var instructions = getInstructions();
+
+const updateGameInstructions = (newInstructions) => {
+    instructions = newInstructions;
+};
+
+export { updateGameInstructions };
+  
+
+const instructions3 = [
     { type: "forward", value: 1 },
     { type: "left" },
     { type: "forward", value: 4 },
@@ -163,7 +174,7 @@ class Car extends Phaser.GameObjects.Container {
         carImg.setScale(aspectRatio * 1.2)
 
         let angle = 0;
-        switch (orientation) {
+        switch (initialOrientation) {
             default: angle = 0;
                 break;
             case 'east': angle = 90;
@@ -176,6 +187,7 @@ class Car extends Phaser.GameObjects.Container {
 
         carImg.setAngle(angle)
         this.add(carImg)
+        console.log(instructions);
         this.instructions = instructions;
 
         this.body = carImg;
@@ -183,7 +195,7 @@ class Car extends Phaser.GameObjects.Container {
         scene.add.existing(this);
 
         //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser/Animations_and_tweens
-        this.EjecutarInstrucciones();
+        //this.EjecutarInstrucciones();
 
     }
 
@@ -206,7 +218,7 @@ class Car extends Phaser.GameObjects.Container {
                     if (places >= instruction.value) {
                         this.Avanzar(instruction.value);
                     } else {
-                        this.Avanzar(places)
+                        this.Avanzar(places+0.6)
                         console.log("Error de ejecución.")
                         break outerLoop;
                     }
@@ -286,7 +298,7 @@ class Car extends Phaser.GameObjects.Container {
         let c = 0;
         let tempDelay = delay;
 
-        switch (orientation) {
+        switch (currentOrientation) {
             case 'north':
                 while ([1, 3, 4].includes(matrix[row - 1][column])) {
                     if (this.semaforoUbicadoEn(column, row - 1)) {
@@ -358,7 +370,7 @@ class Car extends Phaser.GameObjects.Container {
 
     Avanzar(places) {
         const duration = places * carSpeed;
-        switch (orientation) {
+        switch (currentOrientation) {
             case "north":
                 this.scene.tweens.add({
                     targets: this,
@@ -406,9 +418,9 @@ class Car extends Phaser.GameObjects.Container {
     }
 
     Derecha() {
-        orientation = orientation === "east" ? "south" :
-            orientation === "south" ? "west" :
-                orientation === "west" ? "north" :
+        currentOrientation = currentOrientation === "east" ? "south" :
+            currentOrientation === "south" ? "west" :
+                currentOrientation === "west" ? "north" :
                     "east";
 
         this.scene.tweens.add({
@@ -424,9 +436,9 @@ class Car extends Phaser.GameObjects.Container {
 
     Izquierda() {
 
-        orientation = orientation === "east" ? "north" :
-            orientation === "south" ? "east" :
-                orientation === "west" ? "south" :
+        currentOrientation = currentOrientation === "east" ? "north" :
+            currentOrientation === "south" ? "east" :
+                currentOrientation === "west" ? "south" :
                     "east";
 
         this.scene.tweens.add({
@@ -479,7 +491,7 @@ class Car extends Phaser.GameObjects.Container {
 
     Esperar() {
         let duration = 0;
-        switch (orientation) {
+        switch (currentOrientation) {
             case 'north':
                 if (this.semaforoUbicadoEn(currentColumn, currentRow - 1)) {
                     let semaforo = this.getSemaforo(currentColumn, currentRow - 1);
@@ -619,20 +631,6 @@ class CarScene extends Phaser.Scene {
 
     create() {
 
-        const externalButton = document.getElementById("run_code");
-
-        if (externalButton) {
-            externalButton.addEventListener("click", () => {
-                delay = 0;
-                currentRow = startRow;
-                currentColumn = startColumn;
-                const carro = new Car(this, instructions1);
-
-            });
-        }
-
-
-
         // Background
         this.drawBackground();
         // Road
@@ -645,7 +643,40 @@ class CarScene extends Phaser.Scene {
             trafficLightObjects.push(new TrafficLight(this, object.column, object.row, object.orientation, object.value, object.isGreen));
         }
 
-        //const carro = new Car(this, instructions2);
+
+
+        const objectList = [];
+
+        const externalButton = document.getElementById("run_code");
+
+        // Al crear el carro, este se ubica pero quieto
+        // Función para: Ubicar carro en su posición y orientación inicial (click)
+        // De esta manera no se tiene que destruir ningún objeto
+
+        // 1. Resetear variables iniciales
+        // 2. Ubicar al carro en su pos y orientación inicial
+
+        
+        var carro = new Car(this, instructions);
+
+        if (externalButton) {
+            externalButton.addEventListener("click", () => {
+
+                carro.destroy();
+
+                carro = new Car(this, instructions);
+
+                delay = 0;
+                currentRow = startRow;
+                currentColumn = startColumn;
+                currentOrientation = 'east';
+                
+
+                carro.EjecutarInstrucciones();
+
+
+            });
+        }
 
 
     }
