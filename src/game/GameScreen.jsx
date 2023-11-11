@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useContext, useEffect } from 'react';
 import Phaser from 'phaser';
 //import Car from './game/phaser_car'
 import map01 from './maps/map01';
 import map02 from './maps/map02';
 import { fromJSON } from 'postcss';
-import { getInstructions, updateInstructions } from "./instructionList";
+import InstructionsContext from './InstructionsProvider';
+// import { getInstructions, updateInstructions } from "./instructionList";
 
 console.clear();
 
@@ -38,13 +39,13 @@ const duracionGiro = 900;
 var currentOrientation = initialOrientation;
 var delay = 0;
 
-var instructions = getInstructions();
+let instructions = [];
 
-const updateGameInstructions = (newInstructions) => {
-    instructions = newInstructions;
-};
+// const updateGameInstructions = (newInstructions) => {
+//     instructions = newInstructions;
+// };
 
-export { updateGameInstructions };
+// export { updateGameInstructions };
   
 
 const instructions3 = [
@@ -656,7 +657,6 @@ class CarScene extends Phaser.Scene {
         // 1. Resetear variables iniciales
         // 2. Ubicar al carro en su pos y orientación inicial
 
-        
         var carro = new Car(this, instructions);
 
         if (externalButton) {
@@ -683,12 +683,10 @@ class CarScene extends Phaser.Scene {
 }
 
 
+function GameScreen(){
+    const {instructions: instructionsFromReact} = useContext(InstructionsContext);
 
-class GameScreen extends Component {
-    componentDidMount() {
-
-
-
+    useEffect(()=>{
         const config = {
             type: Phaser.AUTO,
             width: matrix[0].length * tileSize,
@@ -699,14 +697,16 @@ class GameScreen extends Component {
         };
 
         // Initialize Phaser game
-        this.game = new Phaser.Game(config);
-    }
+        const game = new Phaser.Game(config);
+    }, [])
 
-    render() {
-        return (
-            <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
-        );
-    }
+    useEffect(()=> {
+        instructions = [...instructionsFromReact]
+    }, [instructionsFromReact])
+
+    return (
+        <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
+    );
 }
 
 export default GameScreen;

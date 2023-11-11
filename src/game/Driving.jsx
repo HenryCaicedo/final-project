@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
 import GameScreen from "./GameScreen";
 import DndComponent from "./Dnd";
 import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle, Eye } from "lucide-react";
-import { addInstruction } from "./instructionList";
+import InstructionsContext, { InstructionsProvider } from "./InstructionsProvider";
+import newGuid from "../utils/newGuid";
 
 
 // NAVBAR
@@ -21,10 +22,16 @@ function CloseButton() {
 
 
 function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana /> , type}) {
+  const {addInstruction} = useContext(InstructionsContext)
 
   const handleClick = () => {
-    addInstruction(type)
-    console.log('Component pressed!');
+    let newInstruction;
+    if (type === 'forward') {
+      newInstruction = { id: newGuid(), type: type, value: 1 };
+    } else {
+      newInstruction = { id: newGuid(), type: type };
+    }
+    addInstruction(newInstruction)
   };
 
   return (
@@ -144,6 +151,7 @@ export default function Driving() {
   return (
     <div className="flex flex-col h-screen mx-10">
       <div className="m-10 flex flex-col h-screen">
+        <InstructionsProvider>
         {/* NavBar */}
         <nav>
           <NavBar />
@@ -158,6 +166,7 @@ export default function Driving() {
             <CodePanel />
           </div>
         </main>
+        </InstructionsProvider>
       </div>
 
     </div>

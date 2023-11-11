@@ -18,7 +18,8 @@
     "phaser": "^3.60.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.17.0"
+    "react-router-dom": "^6.17.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
