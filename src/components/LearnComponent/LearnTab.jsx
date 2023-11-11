@@ -34,7 +34,41 @@ export default function LearnTab() {
           "¡No olvides que puedes arrastrar tus movimientos para reorganizarlos!"
         }
       />
-      <UnitContainer title="Unidad 2: Condicionales" />
+      <UnitContainer
+        title="Unidad 2: Condicionales"
+        color="purple-400"
+        description={
+          "Ahora tendrás que tener en cuenta semáforos en tu recorrido"
+        }
+        content={
+          <div>
+            ¡Hola viajero! 🚦🕰️ En el camino, a veces nos encontramos con
+            semáforos, ¡una lección de paciencia! 🌈{" "}
+            <p>
+              1. <b>Esperar</b> en el semáforo 🛑:
+            </p>{" "}
+            Cuando la luz roja brilla, es momento de <b>detenerse</b> con el
+            boton de Observar. La paciencia es la llave mientras esperas tu
+            turno.{" "}
+            <p>
+              2. ¡Verde, <b>avanza</b>! 🟢:
+            </p>{" "}
+            Cuando el semáforo cambia a verde, es tu momento. ¡<b>Avanza</b> con
+            confianza hacia tu destino! Recuerda, incluso cuando esperas, cada
+            luz cambia y te acerca un paso más a tu meta. 🚗💨 ¡Mantén la calma
+            y disfruta del viaje! 🌟
+          </div>
+        }
+        imageSrc={
+          "https://media.istockphoto.com/id/1414384384/es/foto/el-render-3d-del-coche-viaja-con-accesorios-de-playa-concepto-de-verano.webp?s=1024x1024&w=is&k=20&c=1P6LjS1gOiqjUWSBP-Fv1tM1XH0W3JC2NBDLrcxR6Mg="
+        }
+        tipImage={
+          "https://media.istockphoto.com/id/1432690920/es/foto/pixel-hand-cursor-mascot-person-character-with-traffic-green-light-renderizado-3d.jpg?s=1024x1024&w=is&k=20&c=N5CtjzPwJIG7U1GleICYiJYj4ueycJqELH5TKJaijfo="
+        }
+        tipContent={
+          "Para esperar un semáforo, puedes agregar la instrucción de Observar. ¡Usa la instrucción de Avanzar en el momento adecuado!"
+        }
+      />
       <UnitContainer title="Unidad 3: Ciclos" color="purple-400" />
       <UnitContainer title="Unidad 4" />
       <UnitContainer title="Unidad 5" />

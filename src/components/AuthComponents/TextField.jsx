@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function TextField({
   placeholder = "textfield",
@@ -6,6 +6,7 @@ export default function TextField({
   type = "text",
   value,
   onChange,
+  isError = false, // New prop for indicating error
 }) {
   const handleInputChange = (e) => {
     // Use e.target.value to get the input value
@@ -17,7 +18,9 @@ export default function TextField({
     placeholder: placeholder,
     onChange: handleInputChange,
     value: value,
-    className: "w-full rounded-2xl p-2 bg-gray-200 text-black font-semibold",
+    className: `w-full rounded-2xl p-2  text-black font-semibold ${
+      isError ? "bg-red-500" : "bg-gray-200" // Apply red border for errors
+    }`,
   };
 
   return <input {...inputProps} />;

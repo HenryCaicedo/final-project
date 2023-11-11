@@ -1,15 +1,21 @@
+// SignUp.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthNavBar from "./AuthNavBar";
 import TextField from "./TextField";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import { MainButton } from "../Theme/ThemeComponents";
+
 export default function SignUp() {
   const [formData, setFormData] = useState({
     nombre: "",
-    correoElectronico: "",
+    correoElectronico: "", // Ensure this has a default value (e.g., "")
     contraseña: "",
+    confirmPassword: "", // Ensure this has a default value (e.g., "")
   });
+  const [emailError, setEmailError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const [isFailure, setIsFailure] = useState(false);
   const handleInputChange = (name, value) => {
     setFormData({
@@ -20,6 +26,41 @@ export default function SignUp() {
   const navigate = useNavigate();
   const handleSignUp = async () => {
     try {
+      // Validación correo.
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.correoElectronico)) {
+        console.log("Invalid email");
+        setEmailError(true);
+        return;
+      } else {
+        setEmailError(false);
+      }
+      // Validar nombre
+      if (!formData.nombre) {
+        console.log("Name cannot be empty or null");
+        setNameError(true);
+        return;
+      } else {
+        setNameError(false);
+      }
+      // Validar contraseña
+      if (!formData.contraseña) {
+        console.log("Password cannot be empty or null");
+        setPasswordError(true);
+        return;
+      } else {
+        setPasswordError(false);
+      }
+      // Perform password match check
+      if (formData.contraseña !== formData.confirmPassword) {
+        console.log("Passwords do not match");
+        setPasswordError(true);
+        return;
+      } else {
+        setPasswordError(false);
+      }
+
+      // If email is valid and passwords match, proceed with the API call
       console.log(JSON.stringify(formData));
       const { confirmPassword, ...formDataWithoutConfirm } = formData;
 
@@ -30,13 +71,14 @@ export default function SignUp() {
         contraseña: formData.contraseña,
       });
 
-      // Check the result of the request
       console.log(response.status);
-      if (response.status == 201) {
-        // response.data.success returns undefined.
+
+      if (response.status === 201) {
         console.log("SignUp successful!");
+        // Navigate to the desired location upon successful signup
         navigate("/progress");
       } else {
+        // Log the entire response object to understand the structure
         console.log(response.data);
       }
     } catch (error) {
@@ -56,11 +98,14 @@ export default function SignUp() {
             placeholder={"Nombre"}
             name="nombre"
             value={formData.nombre}
+            isError={nameError}
             onChange={(value) => handleInputChange("nombre", value)}
           />
           <TextField
             placeholder={"Email"}
+            type="email"
             name="correoElectronico"
+            isError={emailError}
             value={formData.correoElectronico}
             onChange={(value) => handleInputChange("correoElectronico", value)}
           />
@@ -68,13 +113,15 @@ export default function SignUp() {
             placeholder={"Contraseña"}
             type="password"
             name="contraseña"
+            isError={passwordError}
             value={formData.contraseña}
             onChange={(value) => handleInputChange("contraseña", value)}
           />
           <TextField
             placeholder={"Confirmar contraseña"}
-            type="password"
+            type="password" // Change type to "password"
             name="confirmPassword"
+            isError={passwordError}
             value={formData.confirmPassword}
             onChange={(value) => handleInputChange("confirmPassword", value)}
           />
