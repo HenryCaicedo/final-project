@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function TextField({
   placeholder = "textfield",
   name,
+  type = "text",
   value,
   onChange,
 }) {
@@ -11,12 +12,13 @@ export default function TextField({
     onChange(e.target.value);
   };
 
-  return (
-    <input
-      type="text"
-      placeholder={placeholder}
-      onChange={handleInputChange}
-      className="w-full rounded-2xl p-2 bg-gray-200 text-black font-semibold"
-    />
-  );
+  const inputProps = {
+    type: type === "password" ? "password" : "text",
+    placeholder: placeholder,
+    onChange: handleInputChange,
+    value: value,
+    className: "w-full rounded-2xl p-2 bg-gray-200 text-black font-semibold",
+  };
+
+  return <input {...inputProps} />;
 }

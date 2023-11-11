@@ -5,7 +5,16 @@ import Guide from "../Tips";
 const activitiesFolderPath = "../game"; // Replace with the actual path
 import { Icon } from "@iconify/react";
 
-function UnitContainer({ title, color = "purple-500", description }) {
+function UnitContainer({
+  title,
+  color = "purple-500",
+  description,
+  content,
+  tipTitle,
+  tipContent,
+  imageSrc,
+  tipImage,
+}) {
   const jsFiles = getJSFilesInFolder(activitiesFolderPath);
   const [showTips, setShowTips] = useState(false);
 
@@ -45,9 +54,14 @@ function UnitContainer({ title, color = "purple-500", description }) {
               <Icon icon="flat-color-icons:idea" onClick={toggleTips} />
               <Guide
                 visible={showTips}
-                content={description}
+                content={content}
                 closeGuide={toggleTips}
                 title={title}
+                description={description}
+                tipContent={tipContent}
+                tipTitle={tipTitle}
+                imageSrc={imageSrc}
+                tipImage={tipImage}
               />
             </div>
           </div>
