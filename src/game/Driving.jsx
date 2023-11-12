@@ -21,8 +21,8 @@ function CloseButton() {
 }
 
 
-function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana /> , type}) {
-  const {addInstruction} = useContext(InstructionsContext)
+function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'border-transparent', icon = <Banana />, type }) {
+  const { addInstruction } = useContext(InstructionsContext)
 
   const handleClick = () => {
     let newInstruction;
@@ -53,7 +53,7 @@ function InstructionTool({ children, bgColor = 'bg-[#ececec]', borderColor = 'bo
 
 // TO DO: Un color por instrucción
 function InstructionToolBox() {
-  
+
   return (
     <div className="border-2 border-gray-300 rounded-3xl flex align-middle justify-center bg-white px-2">
       <InstructionTool type='forward' icon={<ChevronsRight />} bgColor="bg-pink-100" borderColor="border-pink-200">Avanzar</InstructionTool>
@@ -91,9 +91,14 @@ function GamePanel() {
 
 function CodePanel() {
   return (
-    <div className="bg-white w-full h-full border-2 border-gray-300 rounded-3xl overflow-hidden">
+    <div className="bg-white w-full flex flex-col h-[80vh] border-2 border-gray-300 rounded-3xl">
+      <div className="flex-1">
+
       <RunCodeBar />
-      <DndComponent />
+      </div>
+      <div className="w-full  h-full overflow-auto">
+        <DndComponent />
+      </div>
     </div>
   )
 }
@@ -152,20 +157,20 @@ export default function Driving() {
     <div className="flex flex-col h-screen mx-10">
       <div className="m-10 flex flex-col h-screen">
         <InstructionsProvider>
-        {/* NavBar */}
-        <nav>
-          <NavBar />
-        </nav>
+          {/* NavBar */}
+          <nav>
+            <NavBar />
+          </nav>
 
-        {/* Main */}
-        <main className="flex-1 flex space-x-5 mt-2">
-          <div className="flex-1 h-full flex items-center justify-center">
-            <GamePanel />
-          </div>
-          <div className="w-[40vh] flex items-center justify-center">
-            <CodePanel />
-          </div>
-        </main>
+          {/* Main */}
+          <main className="flex-1 flex space-x-5 mt-2">
+            <div className="flex-1 h-full flex items-center justify-center">
+              <GamePanel />
+            </div>
+            <div className="w-[40vh] flex items-center justify-center">
+              <CodePanel />
+            </div>
+          </main>
         </InstructionsProvider>
       </div>
 
