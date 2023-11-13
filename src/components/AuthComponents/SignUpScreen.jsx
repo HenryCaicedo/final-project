@@ -16,7 +16,8 @@ export default function SignUp() {
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [isFailure, setIsFailure] = useState(false);
+  // const [isFailure, setIsFailure] = useState(false); -- No tocar por el momento, esta aqui por si luego se deja de usar window.alert.
+  const [anyError, setAnyError] = useState(false);
   const handleInputChange = (name, value) => {
     setFormData({
       ...formData,
@@ -31,7 +32,7 @@ export default function SignUp() {
       if (!emailRegex.test(formData.correoElectronico)) {
         console.log("Invalid email");
         setEmailError(true);
-        return;
+        setAnyError(true);
       } else {
         setEmailError(false);
       }
@@ -39,25 +40,28 @@ export default function SignUp() {
       if (!formData.nombre) {
         console.log("Name cannot be empty or null");
         setNameError(true);
-        return;
+        setAnyError(true);
       } else {
         setNameError(false);
       }
       // Validar contraseña
-      if (!formData.contraseña) {
+      if (
+        !formData.contraseña ||
+        formData.contraseña !== formData.confirmPassword
+      ) {
         console.log("Password cannot be empty or null");
         setPasswordError(true);
-        return;
+        setAnyError(true);
       } else {
         setPasswordError(false);
+        setAnyError(false);
       }
-      // Perform password match check
-      if (formData.contraseña !== formData.confirmPassword) {
-        console.log("Passwords do not match");
-        setPasswordError(true);
+
+      if (anyError) {
+        window.alert(
+          "¡Ups! 🙈 Parece que ha habido un pequeño desliz al ingresar los datos. ¡No te preocupes, todos cometemos errores! 🤷‍♂️ Intenta verificar e ingresarlos nuevamente 💻💪 "
+        );
         return;
-      } else {
-        setPasswordError(false);
       }
 
       // If email is valid and passwords match, proceed with the API call
@@ -83,8 +87,11 @@ export default function SignUp() {
       }
     } catch (error) {
       // Handle errors
-      setIsFailure(true);
+      // setIsFailure(true); No tocar por el momento, esta aqui por si luego se deja de usar window.alert.
       console.error("Error:", error);
+      window.alert(
+        "¡Oh no! 🚨 Parece que estamos teniendo problemas para conectar con el servidor. Aquí hay una guía rápida para abordar este percance:\n1. Revisa tu conexión a internet🌐: Asegúrate de estar conectado a una red estable.\n2. Reintenta en unos minutos🕓: A veces, los servidores necesitan un breve descanso.\n"
+      );
     }
   };
 
@@ -129,11 +136,11 @@ export default function SignUp() {
           <div onClick={handleSignUp} className="w-full">
             <MainButton>Crear cuenta</MainButton>
           </div>
-          {isFailure ? (
+          {/* {isFailure ? (
             <div className="bg-black">
               Ha ocurrido un error al crear el usuario.
             </div>
-          ) : null}
+          ) : null} -- No tocar por el momento, esta aqui por si luego se deja de usar window.alert.*/}
         </div>
       </div>
     </div>
