@@ -106,27 +106,6 @@ function CodePanel() {
 
 // CODE PANEL
 
-function RunCodeButton() {
-
-  const play = <Play />
-  const stop = <StopCircle />
-
-  return (
-
-    <button className="bg-gray-200 py-2 px-3 rounded-2xl text-black font-medium flex space-x-2
-    hover:bg-gray-300">
-      <div className="flex items-center">
-        {play}
-      </div>
-      <div className="flex-grow">
-        Ejecutar
-      </div>
-
-    </button>
-
-  )
-}
-
 function RunCodeBar() {
   return (
     <div className="w-full flex py-3 px-8 items-center border-b-2">
