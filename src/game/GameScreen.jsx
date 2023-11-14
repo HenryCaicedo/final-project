@@ -1,22 +1,28 @@
 import React, { Component, useContext, useEffect } from 'react';
 import Phaser from 'phaser';
-//import Car from './game/phaser_car'
-import map01 from './maps/map01';
-import map02 from './maps/map02';
+//import Car from './game/phaser_car'}
+import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
-// import { getInstructions, updateInstructions } from "./instructionList";
-
 console.clear();
 
 
-const map = map01;
+
+const map = mapListU1.map02;
+
+console.log(map);
 
 const matrix = map.matrix;
+
+// START
 const startRow = map.start.row;
 const startColumn = map.start.column;
-const initialOrientation = map.orientation;
+const startOrientation = map.start.orientation;
 
+// FINISH
+const finishRow = map.finish.row;
+const finishColumn = map.finish.column;
+const finishOrientation = map.finish.orientation;
 
 
 // SEMÁFORO
@@ -36,7 +42,7 @@ var currentColumn = startColumn;
 const carSpeed = 350; //duration
 const duracionGiro = 900;
 
-var currentOrientation = initialOrientation;
+var currentOrientation = startOrientation;
 var delay = 0;
 
 let instructions = [];
@@ -46,7 +52,7 @@ let instructions = [];
 // };
 
 // export { updateGameInstructions };
-  
+
 
 const instructions3 = [
     { type: "forward", value: 1 },
@@ -175,7 +181,7 @@ class Car extends Phaser.GameObjects.Container {
         carImg.setScale(aspectRatio * 1.2)
 
         let angle = 0;
-        switch (initialOrientation) {
+        switch (startOrientation) {
             default: angle = 0;
                 break;
             case 'east': angle = 90;
@@ -219,7 +225,7 @@ class Car extends Phaser.GameObjects.Container {
                     if (places >= instruction.value) {
                         this.Avanzar(instruction.value);
                     } else {
-                        this.Avanzar(places+0.6)
+                        this.Avanzar(places + 0.6)
                         console.log("Error de ejecución.")
                         break outerLoop;
                     }
@@ -573,6 +579,12 @@ class CarScene extends Phaser.Scene {
 
         this.load.image('road_stop', 'src/assets/tiles/misc/road_stop.png');
 
+        this.load.image('goal', `src/game/assets/tiles/Grass/road/goal.png`);
+
+        this.load.image('start', `src/game/assets/tiles/Grass/road/start.png`);
+
+        
+
         this.load.spritesheet('traffic_lights', 'src/assets/tiles/misc/traffic_lights_sprites.png', { frameWidth: 50, frameHeight: 116 });
 
         // Load Grass
@@ -627,6 +639,46 @@ class CarScene extends Phaser.Scene {
 
             }
         }
+
+
+        // Finish
+        let angle = 0;
+        switch (finishOrientation) {
+            default: angle = 0;
+                break;
+            case 'east': angle = 90;
+                break;
+            case 'south': angle = 180;
+                break;
+            case 'west': angle = 270;
+                break;
+        }
+
+        this.add
+            .image( finishColumn * tileSize + tileSize/2, finishRow * tileSize + tileSize/2, 'goal')
+            .setDisplaySize(tileSize, tileSize)
+            .setOrigin(0.5).setAngle(angle);
+
+        switch (startOrientation) {
+            default: angle = 0;
+                break;
+            case 'east': angle = 90;
+                break;
+            case 'south': angle = 180;
+                break;
+            case 'west': angle = 270;
+                break;
+        }
+
+        this.add
+            .image( startColumn * tileSize + tileSize/2, startRow * tileSize + tileSize/2, 'start')
+            .setDisplaySize(tileSize, tileSize)
+            .setOrigin(0.5).setAngle(angle);
+
+            
+
+
+
     }
 
 
@@ -670,7 +722,7 @@ class CarScene extends Phaser.Scene {
                 currentRow = startRow;
                 currentColumn = startColumn;
                 currentOrientation = 'east';
-                
+
 
                 carro.EjecutarInstrucciones();
 
@@ -683,10 +735,10 @@ class CarScene extends Phaser.Scene {
 }
 
 
-function GameScreen(){
-    const {instructions: instructionsFromReact} = useContext(InstructionsContext);
+function GameScreen() {
+    const { instructions: instructionsFromReact } = useContext(InstructionsContext);
 
-    useEffect(()=>{
+    useEffect(() => {
         const config = {
             type: Phaser.AUTO,
             width: matrix[0].length * tileSize,
@@ -700,7 +752,7 @@ function GameScreen(){
         const game = new Phaser.Game(config);
     }, [])
 
-    useEffect(()=> {
+    useEffect(() => {
         instructions = [...instructionsFromReact]
     }, [instructionsFromReact])
 

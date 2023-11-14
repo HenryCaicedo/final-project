@@ -2,6 +2,7 @@ import { CarFront, LogOutIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
+import { appName } from "./temp";
 
 function SidebarHeader() {
   return (
@@ -9,7 +10,7 @@ function SidebarHeader() {
       <div className="text-black mr-4" size={50}>
         <CarFront color="#5686E1" size={42} />
       </div>
-      <div className="text-2xl font-bold text-[#5686E1]">AppName</div>
+      <div className="text-2xl font-bold text-[#5686E1]">{appName}</div>
     </div>
   );
 }
