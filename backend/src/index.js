@@ -1,5 +1,7 @@
 import routerUsuarios from './usuarios/usuarios.router';
 import routerPuntajes from './puntajes/puntaje.router';
+import { config } from 'dotenv';
+config();
 const express = require('express');
 const app = express();
 const port = 8080;
