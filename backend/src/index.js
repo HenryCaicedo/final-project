@@ -1,5 +1,4 @@
 import routerUsuarios from './usuarios/usuarios.router';
-import routerPuntajes from './puntajes/puntaje.router';
 import { config } from 'dotenv';
 config();
 const express = require('express');
@@ -10,7 +9,6 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 app.use('/', routerUsuarios);
-app.use('/Puntaje', routerPuntajes);
 app.listen(port, (err) => {
   if (err) {
     console.log(err);
