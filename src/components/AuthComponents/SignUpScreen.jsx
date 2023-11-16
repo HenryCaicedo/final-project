@@ -69,7 +69,7 @@ export default function SignUp() {
       const { confirmPassword, ...formDataWithoutConfirm } = formData;
 
       console.log(JSON.stringify(formDataWithoutConfirm));
-      const response = await axios.post("http://localhost:8080/signup", {
+      const response = await axios.post("https://api-coderacers.onrender.com/signup", {
         nombre: formData.nombre,
         correoElectronico: formData.correoElectronico,
         contrasena: formData.contraseña,
