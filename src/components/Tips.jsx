@@ -13,6 +13,7 @@ function Guide({
   tipContent,
   imageSrc,
   tipImage,
+  videoId,
 }) {
   if (!visible) return null;
 
@@ -40,6 +41,7 @@ function Guide({
             tipTitle={tipTitle}
             tipContent={tipContent}
             tipImage={tipImage}
+            videoId={videoId}
           />
         </div>
       </div>

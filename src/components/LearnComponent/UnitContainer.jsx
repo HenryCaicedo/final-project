@@ -14,6 +14,7 @@ function UnitContainer({
   tipContent,
   imageSrc,
   tipImage,
+  videoId,
 }) {
   const jsFiles = getJSFilesInFolder(activitiesFolderPath);
   const [showTips, setShowTips] = useState(false);
@@ -62,6 +63,7 @@ function UnitContainer({
                 tipTitle={tipTitle}
                 imageSrc={imageSrc}
                 tipImage={tipImage}
+                videoId={videoId}
               />
             </div>
           </div>

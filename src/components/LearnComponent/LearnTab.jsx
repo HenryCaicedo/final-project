@@ -42,6 +42,7 @@ export default function LearnTab() {
         tipContent={
           "¡No olvides que puedes arrastrar tus movimientos para reorganizarlos!"
         }
+        videoId="jNQXAC9IVRw"
       />
       <UnitContainer
         title="Unidad 2: Condicionales"
