@@ -9,6 +9,9 @@ export function InstructionsProvider({ children }) {
     setInstructions([...instructions, newInstruction]);
   };
 
+
+
+
   const removeInstruction = (instructionId) => {
     setInstructions((prevInstructions) =>
       prevInstructions.filter((instruction) => instruction.id !== instructionId)

@@ -8,7 +8,7 @@ console.clear();
 
 
 
-const map = mapListU1.map02;
+const map = mapListU1.map03;
 
 console.log(map);
 
@@ -37,13 +37,13 @@ const theme = 'Grass'
 
 var currentRow = startRow;
 var currentColumn = startColumn;
+var currentInstructionIndex = 0;
 
 // CARRO
 const carSpeed = 350; //duration
 const duracionGiro = 900;
 
 var currentOrientation = startOrientation;
-var delay = 0;
 
 let instructions = [];
 
@@ -95,14 +95,14 @@ const instructions2 = [
 
 
 class TrafficLight extends Phaser.GameObjects.Container {
-    constructor(scene, column, row, orientation, side, isGreen) {
+    constructor(scene, column, row, orientation, side, isRed) {
         super(scene, tileSize / 2 + tileSize * column, tileSize / 2 + tileSize * row);
 
 
         //TODO: 
         // En amarillo se puede pasar
 
-        this.isGreen = isGreen;
+        this.isRed = isRed;
         this.column = column;
         this.row = row;
 
@@ -114,7 +114,7 @@ class TrafficLight extends Phaser.GameObjects.Container {
         const num = (side === undefined) ? -1 : 1;
 
         // Textura semáforo
-        const initialColor = isGreen ? 3 : 1;
+        const initialColor = isRed ? 1 : 3;
         const trafficLights = scene.add.sprite(side * tileSize * .75, 0, 'traffic_lights', initialColor).setOrigin(0.5, 0.5);
         trafficLights.setScale(aspectRatio * 0.8);
 
@@ -148,12 +148,12 @@ class TrafficLight extends Phaser.GameObjects.Container {
 
 
     updateColor() {
-        if (this.isGreen == false) {
+        if (this.isRed == false) {
             setTimeout(() => {
                 this.trafficLights.setTexture('traffic_lights', 2);
                 setTimeout(() => {
-                    this.trafficLights.setTexture('traffic_lights', 3);
-                    this.isGreen = true;
+                    this.trafficLights.setTexture('traffic_lights', 1);
+                    this.isRed = true;
                     this.updateColor();
                 }, yellowDuration);
             }, colorDuration);
@@ -161,8 +161,8 @@ class TrafficLight extends Phaser.GameObjects.Container {
             setTimeout(() => {
                 this.trafficLights.setTexture('traffic_lights', 2);
                 setTimeout(() => {
-                    this.trafficLights.setTexture('traffic_lights', 1);
-                    this.isGreen = false;
+                    this.trafficLights.setTexture('traffic_lights', 3);
+                    this.isRed = false;
                     this.updateColor();
                 }, yellowDuration);
             }, colorDuration);
@@ -194,7 +194,6 @@ class Car extends Phaser.GameObjects.Container {
 
         carImg.setAngle(angle)
         this.add(carImg)
-        console.log(instructions);
         this.instructions = instructions;
 
         this.body = carImg;
@@ -202,364 +201,196 @@ class Car extends Phaser.GameObjects.Container {
         scene.add.existing(this);
 
         //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser/Animations_and_tweens
-        //this.EjecutarInstrucciones();
 
     }
 
 
-    EjecutarInstrucciones() {
-        outerLoop: for (const instruction of this.instructions) {
-            //console.log('Delay: ' + delay);
-            switch (instruction.type) {
-                case "right":
-                    this.Derecha();
-                    break;
-                case "left":
-                    this.Izquierda();
-                    break;
-                case "wait":
-                    this.Esperar();
-                    break;
-                default:
-                    var places = this.LugaresAvanzables();
-                    if (places >= instruction.value) {
-                        this.Avanzar(instruction.value);
-                    } else {
-                        this.Avanzar(places + 0.6)
-                        console.log("Error de ejecución.")
-                        break outerLoop;
-                    }
-            }
+    ejecutarInstruccion(index) {
+
+        const instruction = this.instructions[index];
+
+        switch (instruction.type) {
+            case "right":
+                this.derecha();
+                break;
+            case "left":
+                this.izquierda();
+                break;
+            case "wait":
+                this.Esperar();
+                break;
+            default:
+                this.avanzar(instruction.value);
+        }
+
+    }
+
+    siguienteInstruccion() {
+        currentInstructionIndex += 1;
+
+        if (currentInstructionIndex <= this.instructions.length - 1) {
+            this.ejecutarInstruccion(currentInstructionIndex);
         }
     }
 
 
-    semaforoUbicadoEn(column, row) {
-        for (const semaforo of trafficLightObjects) {
-            if (semaforo.column == column && semaforo.row == row) {
-                return true;
+    semaforoEnRojo(row, column) {
+        console.log('Checking Semaforo');
+        for (let semaforo of trafficLightObjects) {
+            console.log('Looking');
+            console.log(row, column);
+            console.log(semaforo.row, semaforo.column);
+            if (semaforo.row === row && semaforo.column === column) {
+                if (semaforo.isRed){
+                    return true;
+                }
             }
         }
         return false;
     }
+    
 
 
-    getSemaforo(column, row) {
-        for (const semaforo of trafficLightObjects) {
-            if (semaforo.column == column && semaforo.row == row) {
-                return semaforo;
-            }
-        }
-    }
+    avanzar(places) {
 
-    semaforoEnVerde(totalTime, semaforo) {
-
-        console.log('--------------------------------------------');
-        console.log('Tiempo para llegar al semáforo: ', totalTime);
-
-        let isRed = !semaforo.isGreen;
-        let upperBound;
-
-        if (isRed) {
-
-            upperBound = colorDuration;
-
-            if (upperBound < totalTime) {
-                upperBound += 2 * (colorDuration + yellowDuration);
-            }
-            if (upperBound < totalTime) {
-                upperBound += yellowDuration;
-                while (upperBound <= totalTime) {
-                    upperBound += 2 * (colorDuration + yellowDuration);
-                }
-            }
-        } else {
-
-            upperBound = 2 * colorDuration + yellowDuration;
-
-            if (upperBound < totalTime) {
-                upperBound += 2 * colorDuration + 3 * yellowDuration;
-            }
-            if (upperBound < totalTime) {
-                while (upperBound < totalTime) {
-                    upperBound += 2 * (colorDuration + yellowDuration);
-                }
-            }
-
-        }
-
-        let lowerBound = upperBound - colorDuration;
-        if (lowerBound <= totalTime && totalTime <= upperBound) {
-            isRed = true;
-            //console.log('Tiempo para que el semáforo cambie: ', upperBound-totalTime);
-        } else {
-            isRed = false;
-        }
-        return !isRed;
-    }
-
-
-    LugaresAvanzables() {
-        let row = currentRow;
-        let column = currentColumn;
-        let c = 0;
-        let tempDelay = delay;
+        const duration = carSpeed;
 
         switch (currentOrientation) {
-            case 'north':
-                while ([1, 3, 4].includes(matrix[row - 1][column])) {
-                    if (this.semaforoUbicadoEn(column, row - 1)) {
-                        var semaforo = this.getSemaforo(column, row - 1)
-                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
-                            break;
-                        }
-                    }
-                    tempDelay += carSpeed;
-                    c++;
-                    row--;
-                    if ([3, 4].includes(matrix[row][column])) {
-                        break;
-                    }
-                }
-                break;
-            case 'south':
-                while ([1, 5, 6].includes(matrix[row + 1][column])) {
-                    if (this.semaforoUbicadoEn(column, row + 1)) {
-                        var semaforo = this.getSemaforo(column, row + 1)
-                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
-                            break;
-                        }
-                    }
-                    tempDelay += carSpeed;
-                    c++;
-                    row++;
-                    if ([5, 6].includes(matrix[row][column])) {
-                        break;
-                    }
-                }
-                break;
-            case 'east':
-                while ([2, 4, 6].includes(matrix[row][column + 1])) {
-                    if (this.semaforoUbicadoEn(column + 1, row)) {
-                        var semaforo = this.getSemaforo(column + 1, row)
-                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
-                            break;
-                        }
-                    }
-                    tempDelay += carSpeed;
-                    c++;
-                    column++;
-                    if ([4, 6].includes(matrix[row][column])) {
-                        break;
-                    }
-                }
-                break;
-            case 'west':
-                while ([2, 3, 5].includes(matrix[row][column - 1])) {
-                    if (this.semaforoUbicadoEn(column - 1, row)) {
-                        var semaforo = this.getSemaforo(column - 1, row)
-                        if (this.semaforoEnVerde(tempDelay, semaforo) == false) {
-                            break;
-                        }
-                    }
-                    tempDelay += carSpeed;
-                    c++;
-                    column--;
-                    if ([3, 5].includes(matrix[row][column])) {
-                        break;
-                    }
-                }
-                break;
-        }
-        return c;
-    }
 
-
-    Avanzar(places) {
-        const duration = places * carSpeed;
-        switch (currentOrientation) {
             case "north":
-                this.scene.tweens.add({
-                    targets: this,
-                    y: '-=' + places * tileSize,
-                    ease: 'Sine.Out',
-                    duration: duration,
-                    delay: delay,
-                });
+
                 currentRow -= places;
+
+                this.scene.tweens.add({
+                    targets: this,
+                    y: '-=' + tileSize,
+                    ease: 'Linear',
+                    duration: duration,
+                    onComplete: () => {
+                        if (places > 1) {
+                            this.avanzar(places - 1);
+                        } else {
+                            this.siguienteInstruccion();
+                        }
+                    }
+                });
                 break;
+
             case "south":
-                this.scene.tweens.add({
-                    targets: this,
-                    y: '+=' + places * tileSize,
-                    ease: 'Sine.Out',
-                    duration: duration,
-                    delay: delay,
-                });
+
                 currentRow += places;
+
+                this.scene.tweens.add({
+                    targets: this,
+                    y: '+=' + tileSize,
+                    ease: 'Linear',
+                    duration: duration,
+                    onComplete: () => {
+                        if (places > 1) {
+                            this.avanzar(places - 1);
+                        } else {
+                            this.siguienteInstruccion();
+                        }
+                    }
+                });
+
+
                 break;
+
             case "east":
-                this.scene.tweens.add({
-                    targets: this,
-                    x: '+=' + places * tileSize,
-                    ease: 'Sine.Out',
-                    duration: duration,
-                    delay: delay,
-                });
-                currentColumn += places;
+
+
+                if (!this.semaforoEnRojo(currentRow, currentColumn+1)) {
+                    currentColumn += 1;
+
+                    this.scene.tweens.add({
+                        targets: this,
+                        x: '+=' + tileSize,
+                        ease: 'Linear',
+                        duration: duration,
+                        onComplete: () => {
+                            if (places > 1) {
+                                this.avanzar(places - 1);
+                            } else {
+                                this.siguienteInstruccion();
+                            }
+                        }
+                    });
+                }
+
+
                 break;
+
             case "west":
+
+                currentColumn -= places;
+
                 this.scene.tweens.add({
                     targets: this,
-                    x: '-=' + places * tileSize,
-                    ease: 'Sine.Out',
+                    x: '-=' + tileSize,
+                    ease: 'Linear',
                     duration: duration,
-                    delay: delay,
+                    onComplete: () => {
+                        if (places > 1) {
+                            this.avanzar(places - 1);
+                        } else {
+                            this.siguienteInstruccion();
+                        }
+                    }
                 });
-                currentColumn -= places;
                 break;
         }
-
-
-        delay += duration;
-    }
-
-    Derecha() {
-        currentOrientation = currentOrientation === "east" ? "south" :
-            currentOrientation === "south" ? "west" :
-                currentOrientation === "west" ? "north" :
-                    "east";
-
-        this.scene.tweens.add({
-            targets: this.body,
-            angle: '+=90', // Add the desired angle to the current angle
-            duration: duracionGiro,
-            ease: 'elastic', // You can change the easing function as needed
-            delay: delay,
-        });
-
-        delay += duracionGiro;
-    }
-
-    Izquierda() {
-
-        currentOrientation = currentOrientation === "east" ? "north" :
-            currentOrientation === "south" ? "east" :
-                currentOrientation === "west" ? "south" :
-                    "east";
-
-        this.scene.tweens.add({
-            targets: this.body,
-            angle: '-=90', // Add the desired angle to the current angle
-            duration: duracionGiro,
-            ease: 'elastic', // You can change the easing function as needed
-            delay: delay,
-        });
-
-        delay += duracionGiro;
     }
 
 
-    getCambioDeColorTime(semaforo) {
-
-        let isRed = !semaforo.isGreen;
-        let upperBound;
-
-        if (isRed) {
-            upperBound = colorDuration;
-
-            if (upperBound < delay) {
-                upperBound += 2 * (colorDuration + yellowDuration);
-            }
-            if (upperBound < delay) {
-                upperBound += yellowDuration;
-                while (upperBound <= delay) {
-                    upperBound += 2 * (colorDuration + yellowDuration);
-                }
-            }
-        } else {
-
-            upperBound = 2 * colorDuration + yellowDuration;
-
-            if (upperBound < delay) {
-                upperBound += 2 * colorDuration + 3 * yellowDuration;
-            }
-            if (upperBound < delay) {
-                while (upperBound < delay) {
-                    upperBound += 2 * (colorDuration + yellowDuration);
-                }
-            }
-
-        }
-
-        return upperBound - delay;
-    }
-
-
-    Esperar() {
-        let duration = 0;
+    derecha() {
         switch (currentOrientation) {
-            case 'north':
-                if (this.semaforoUbicadoEn(currentColumn, currentRow - 1)) {
-                    let semaforo = this.getSemaforo(currentColumn, currentRow - 1);
-                    if (this.semaforoEnVerde(delay, semaforo) == false) {
-                        console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo) + 1;
-                    }
-                }
+            case "east": currentOrientation = "south";
                 break;
-            case 'south':
-                if (this.semaforoUbicadoEn(currentColumn, currentRow + 1)) {
-                    let semaforo = this.getSemaforo(currentColumn, currentRow + 1);
-                    if (this.semaforoEnVerde(delay, semaforo) == false) {
-                        console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo) + 1;
-                    }
-                }
+            case "south": currentOrientation = "west";
                 break;
-            case 'east':
-                if (this.semaforoUbicadoEn(currentColumn + 1, currentRow)) {
-                    let semaforo = this.getSemaforo(currentColumn + 1, currentRow);
-                    if (this.semaforoEnVerde(delay, semaforo) == false) {
-                        console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo) + 1;
-                    }
-                }
+            case "west": currentOrientation = "north";
                 break;
-            case 'west':
-                if (this.semaforoUbicadoEn(currentColumn - 1, currentRow)) {
-                    let semaforo = this.getSemaforo(currentColumn - 1, currentRow);
-                    if (this.semaforoEnVerde(delay, semaforo) == false) {
-                        console.log('Semáforo en rojo.');
-                        duration = this.getCambioDeColorTime(semaforo) + 1;
-                    }
-                }
+            case "north": currentOrientation = "east";
                 break;
         }
 
-        console.log('Tiempo para que cambie a verde: ' + duration);
-
         this.scene.tweens.add({
-            targets: this,
-            duration: duration,
-            delay: delay,
+            targets: this.body,
+            angle: '+=90',
+            duration: duracionGiro,
+            ease: 'elastic',
+            onComplete: () => {
+                console.log('Derecha');
+                this.siguienteInstruccion();
+            }
         });
-        delay += duration;
-
     }
 
+    izquierda() {
+
+        switch (currentOrientation) {
+            case "east": currentOrientation = "north";
+                break;
+            case "north": currentOrientation = "west";
+                break;
+            case "west": currentOrientation = "south";
+                break;
+            case "south": currentOrientation = "east";
+                break;
+        }
 
 
-    Shake() {
-        // Define the shake animation
         this.scene.tweens.add({
-            targets: this, // Change "this.body" to "this" to target the entire object
-            duration: 100, // Duration of the shake in milliseconds
-            x: '+=5', // Adjust the values based on how you want the object to shake
-            y: '+=5',
-            yoyo: true, // Yoyo makes the object return to its original position
-            repeat: -1, // Repeat indefinitely for a continuous shake effect
+            targets: this.body,
+            angle: '-=90',
+            duration: duracionGiro,
+            ease: 'elastic',
+            onComplete: () => {
+                this.siguienteInstruccion();
+            }
         });
+
     }
 
 
@@ -583,7 +414,7 @@ class CarScene extends Phaser.Scene {
 
         this.load.image('start', `src/game/assets/tiles/Grass/road/start.png`);
 
-        
+
 
         this.load.spritesheet('traffic_lights', 'src/assets/tiles/misc/traffic_lights_sprites.png', { frameWidth: 50, frameHeight: 116 });
 
@@ -655,7 +486,7 @@ class CarScene extends Phaser.Scene {
         }
 
         this.add
-            .image( finishColumn * tileSize + tileSize/2, finishRow * tileSize + tileSize/2, 'goal')
+            .image(finishColumn * tileSize + tileSize / 2, finishRow * tileSize + tileSize / 2, 'goal')
             .setDisplaySize(tileSize, tileSize)
             .setOrigin(0.5).setAngle(angle);
 
@@ -671,11 +502,11 @@ class CarScene extends Phaser.Scene {
         }
 
         this.add
-            .image( startColumn * tileSize + tileSize/2, startRow * tileSize + tileSize/2, 'start')
+            .image(startColumn * tileSize + tileSize / 2, startRow * tileSize + tileSize / 2, 'start')
             .setDisplaySize(tileSize, tileSize)
             .setOrigin(0.5).setAngle(angle);
 
-            
+
 
 
 
@@ -693,21 +524,13 @@ class CarScene extends Phaser.Scene {
 
 
         for (const object of trafficLightParameters) {
-            trafficLightObjects.push(new TrafficLight(this, object.column, object.row, object.orientation, object.value, object.isGreen));
+            trafficLightObjects.push(new TrafficLight(this, object.column, object.row, object.orientation, object.value, object.isRed));
         }
 
 
 
-        const objectList = [];
-
         const externalButton = document.getElementById("run_code");
 
-        // Al crear el carro, este se ubica pero quieto
-        // Función para: Ubicar carro en su posición y orientación inicial (click)
-        // De esta manera no se tiene que destruir ningún objeto
-
-        // 1. Resetear variables iniciales
-        // 2. Ubicar al carro en su pos y orientación inicial
 
         var carro = new Car(this, instructions);
 
@@ -718,13 +541,14 @@ class CarScene extends Phaser.Scene {
 
                 carro = new Car(this, instructions);
 
-                delay = 0;
                 currentRow = startRow;
                 currentColumn = startColumn;
                 currentOrientation = 'east';
+                currentInstructionIndex = 0;
 
-
-                carro.EjecutarInstrucciones();
+                if (instructions.length > 0) {
+                    carro.ejecutarInstruccion(0);
+                }
 
 
             });

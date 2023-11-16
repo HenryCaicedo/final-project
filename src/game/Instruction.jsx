@@ -134,12 +134,10 @@ function Instruction({ user: instruction }) {
 
 
   const handleParentMouseEnter = () => {
-    console.log("Hover parent");
     setIsParentHovered(true); // Update the state
   };
 
   const handleParentMouseLeave = () => {
-    console.log("Parent left");
     setIsParentHovered(false); // Update the state
   };
 
