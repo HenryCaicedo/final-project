@@ -13,11 +13,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  progreso: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'mapas'
+  }],
   activo: {
     type: Boolean,
     default: true  // Valor por defecto es habilitado (true)
   }  // Campo para habilitar/deshabilitar al usuario
 });
-// Encriptando contraseñas con bcrypt
+
 const userModel = mongoose.model('usuarios', userSchema);
 export default userModel;

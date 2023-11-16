@@ -8,10 +8,10 @@ routerUsuarios.post('/signup', createUsuario);
 // Login
 routerUsuarios.post('/login', loginUsuario)
 //Read 
-routerUsuarios.get('/', readUsuario);
+routerUsuarios.get('/:id', readUsuario);
 //Update
-routerUsuarios.patch('/', updateUsuario);
+routerUsuarios.patch('/:id', updateUsuario);
 //Delete
-routerUsuarios.delete('/', deleteUsuario);
+routerUsuarios.delete('/:id', deleteUsuario);
 
 export default routerUsuarios;

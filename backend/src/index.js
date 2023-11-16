@@ -1,4 +1,5 @@
 import routerUsuarios from './usuarios/usuarios.router';
+import routerMapas from './mapas/mapas.router';
 import { config } from 'dotenv';
 config();
 const express = require('express');
@@ -9,6 +10,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 app.use('/', routerUsuarios);
+app.use('/mapa', routerMapas);
 app.listen(port, (err) => {
   if (err) {
     console.log(err);
