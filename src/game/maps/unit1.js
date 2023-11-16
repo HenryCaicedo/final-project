@@ -31,14 +31,19 @@ const mapListU1 = {
     start: { row: 5, column: 0 , orientation: "east" },
     finish: { row: 5, column: 9, orientation: "east"},
     stars: { one: 5, two: 10, three: 15 },
-    trafficLights: [],
+    trafficLights: [
+      {row: 3, column: 1, orientation: 'north', value: 1, isRed: false },
+      {row: 1, column: 4, orientation: 'east', value: 1, isRed: true },
+      {row: 2, column: 7, orientation: 'south', value: 1, isRed: false },
+      {row: 5, column: 6, orientation: 'east', value: 1, isRed: true },
+    ],
   },
 
   map03: {
     matrix: [
       [0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0],
-      [2, 2, 2, 2, 2, 2, 2],
+      [2, 2, 2, 2, 2, 0, 2],
       [0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0],
 
