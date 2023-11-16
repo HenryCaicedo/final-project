@@ -27,6 +27,14 @@ export default function LoginScreen() {
           contrasena: formData.contrasena,
         }
       );
+      
+      const { token, id } = response.data;
+
+      // Guardar el token en el almacenamiento local
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      console.log(token, id)
+      
       // Handle the response, e.g., store user data in the state or local storage
       console.log(response.status);
 

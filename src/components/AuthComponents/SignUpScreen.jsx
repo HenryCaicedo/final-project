@@ -7,6 +7,7 @@ import axios from "axios";
 import { MainButton } from "../Theme/ThemeComponents";
 
 export default function SignUp() {
+  
   const [formData, setFormData] = useState({
     nombre: "",
     correoElectronico: "", // Ensure this has a default value (e.g., "")

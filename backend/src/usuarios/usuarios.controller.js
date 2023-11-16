@@ -53,6 +53,14 @@ export async function loginUsuario(req, res) {
   }
 }
 
+export async function loggedUsuario(req, res) {
+  try {
+    return res.status(200);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server Error' });
+  }
+}
+
 //Read
 
 export async function readUsuario(req, res) {
