@@ -72,7 +72,7 @@ export default function SignUp() {
       const response = await axios.post("http://localhost:8080/signup", {
         nombre: formData.nombre,
         correoElectronico: formData.correoElectronico,
-        contraseña: formData.contraseña,
+        contrasena: formData.contraseña,
       });
 
       console.log(response.status);
