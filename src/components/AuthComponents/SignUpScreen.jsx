@@ -10,7 +10,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({
     nombre: "",
     correoElectronico: "", // Ensure this has a default value (e.g., "")
-    contraseña: "",
+    contrasena: "",
     confirmPassword: "", // Ensure this has a default value (e.g., "")
   });
   const [emailError, setEmailError] = useState(false);
@@ -44,10 +44,10 @@ export default function SignUp() {
       } else {
         setNameError(false);
       }
-      // Validar contraseña
+      // Validar contrasena
       if (
-        !formData.contraseña ||
-        formData.contraseña !== formData.confirmPassword
+        !formData.contrasena ||
+        formData.contrasena !== formData.confirmPassword
       ) {
         console.log("Password cannot be empty or null");
         setPasswordError(true);
@@ -69,11 +69,14 @@ export default function SignUp() {
       const { confirmPassword, ...formDataWithoutConfirm } = formData;
 
       console.log(JSON.stringify(formDataWithoutConfirm));
-      const response = await axios.post("https://api-coderacers.onrender.com/signup", {
-        nombre: formData.nombre,
-        correoElectronico: formData.correoElectronico,
-        contrasena: formData.contraseña,
-      });
+      const response = await axios.post(
+        "https://api-coderacers.onrender.com/signup",
+        {
+          nombre: formData.nombre,
+          correoElectronico: formData.correoElectronico,
+          contrasena: formData.contrasena,
+        }
+      );
 
       console.log(response.status);
 
@@ -117,15 +120,15 @@ export default function SignUp() {
             onChange={(value) => handleInputChange("correoElectronico", value)}
           />
           <TextField
-            placeholder={"Contraseña"}
+            placeholder={"contrasena"}
             type="password"
-            name="contraseña"
+            name="contrasena"
             isError={passwordError}
-            value={formData.contraseña}
-            onChange={(value) => handleInputChange("contraseña", value)}
+            value={formData.contrasena}
+            onChange={(value) => handleInputChange("contrasena", value)}
           />
           <TextField
-            placeholder={"Confirmar contraseña"}
+            placeholder={"Confirmar contrasena"}
             type="password" // Change type to "password"
             name="confirmPassword"
             isError={passwordError}
