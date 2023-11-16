@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUsuario, deleteUsuario,readUsuario, updateUsuario, loginUsuario } from './usuarios.controller';
+import { createUsuario, deleteUsuario,readUsuario, updateUsuario, loginUsuario, progresUsuario } from './usuarios.controller';
 
 const routerUsuarios = Router();
 
@@ -9,6 +9,7 @@ routerUsuarios.post('/signup', createUsuario);
 routerUsuarios.post('/login', loginUsuario)
 //Read 
 routerUsuarios.get('/:id', readUsuario);
+routerUsuarios.get('/progreso/:id', progresUsuario);
 //Update
 routerUsuarios.patch('/:id', updateUsuario);
 //Delete

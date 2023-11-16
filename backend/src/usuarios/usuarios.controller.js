@@ -53,7 +53,25 @@ export async function loginUsuario(req, res) {
 }
 
 //Read
+
 export async function readUsuario(req, res) {
+  const usuarioId = req.params.id; 
+
+  try {
+    
+    const usuario = await userModel.findById(usuarioId);
+
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    return res.json({ usuario });
+  } catch (error) {
+    console.error('Error al leer el usuario:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+export async function progresUsuario(req, res) {
   
   const usuarioId = req.params.id; 
 
