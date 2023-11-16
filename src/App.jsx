@@ -11,6 +11,7 @@ import SignUpScreen from "./components/AuthComponents/SignUpScreen.jsx";
 import HomeScreen from "./components/HomeComponent/HomeScreen.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
+
 function App() {
   return (
     <BrowserRouter>

@@ -78,6 +78,13 @@ export default function SignUp() {
           contrasena: formData.contrasena,
         }
       );
+      localStorage.removeItem('token');
+      localStorage.removeItem('id');
+
+      const { token, id } = response.data;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
 
       console.log(response.status);
 
