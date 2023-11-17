@@ -4,11 +4,11 @@ import Phaser from 'phaser';
 import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
+import GameOverScene from './GameOverScene';
 console.clear();
 
 
-
-const map = mapListU1.map02;
+const map = mapListU1.map03;
 
 console.log(map);
 
@@ -28,7 +28,7 @@ const finishOrientation = map.finish.orientation;
 // SEMÁFORO
 const trafficLightParameters = map.trafficLights;
 const trafficLightObjects = [];
-const yellowDuration = 100;
+const yellowDuration = 500;
 const colorDuration = 2000;
 
 const tileSize = 80;
@@ -46,53 +46,6 @@ const duracionGiro = 900;
 var currentOrientation = startOrientation;
 
 let instructions = [];
-
-// const updateGameInstructions = (newInstructions) => {
-//     instructions = newInstructions;
-// };
-
-// export { updateGameInstructions };
-
-
-const instructions3 = [
-    { type: "forward", value: 1 },
-    { type: "left" },
-    { type: "forward", value: 4 },
-    { type: "right" },
-    { type: "forward", value: 6 },
-    { type: "right" },
-    { type: "forward", value: 2 },
-    { type: "right" },
-    { type: "forward", value: 4 },
-    { type: "left" },
-    { type: "forward", value: 2 },
-    { type: "left" },
-    { type: "forward", value: 6 },
-]
-
-const instructions2 = [
-    { type: "forward", value: 1 },
-    { type: "left" },
-    { type: "forward", value: 1 },
-    { type: "wait" },
-    { type: "forward", value: 3 },
-    { type: "right" },
-    { type: "forward", value: 1 },
-    { type: "wait" },
-    { type: "forward", value: 5 },
-    { type: "right" },
-    { type: "wait" },
-    { type: "forward", value: 2 },
-    { type: "right" },
-    { type: "forward", value: 4 },
-    { type: "left" },
-    { type: "forward", value: 2 },
-    { type: "left" },
-    { type: "forward", value: 2 },
-    { type: "wait" },
-    { type: "forward", value: 4 },
-]
-
 
 class TrafficLight extends Phaser.GameObjects.Container {
     constructor(scene, column, row, orientation, side, isRed) {
@@ -218,7 +171,7 @@ class Car extends Phaser.GameObjects.Container {
                 this.izquierda();
                 break;
             case "wait":
-                this.Esperar();
+                this.esperar();
                 break;
             default:
                 this.avanzar(instruction.value);
@@ -227,13 +180,28 @@ class Car extends Phaser.GameObjects.Container {
     }
 
     siguienteInstruccion() {
-        currentInstructionIndex += 1;
 
-        if (currentInstructionIndex <= this.instructions.length - 1) {
-            this.ejecutarInstruccion(currentInstructionIndex);
+        if (!this.gameOver()) {
+
+            currentInstructionIndex += 1;
+
+            if (currentInstructionIndex <= this.instructions.length - 1) {
+                this.ejecutarInstruccion(currentInstructionIndex);
+            }
+        } else {
+            // Game over scene here
         }
+
+        console.log("Game over");
     }
 
+
+    gameOver() {
+        if (currentRow === finishRow && currentColumn === finishColumn) {
+            return true;
+        }
+        return false;
+    }
 
     semaforoEnRojo(row, column) {
         for (let semaforo of trafficLightObjects) {
@@ -268,7 +236,7 @@ class Car extends Phaser.GameObjects.Container {
             case "west":
                 if (![2, 3, 5].includes(matrix[currentRow][currentColumn - 1])) {
                     return true;
-                }   
+                }
                 break;
 
         }
@@ -276,25 +244,29 @@ class Car extends Phaser.GameObjects.Container {
     }
 
 
-    MostrarError() {
+    mostrarError() {
         // Check if there is already an error text on the screen
         const existingErrorText = this.scene.children.getByName('errorText');
-    
+
         if (existingErrorText) {
             existingErrorText.destroy(); // Remove existing error text if any
         }
-    
+
+
+        const errorLine = currentInstructionIndex + 1;
+        const str = 'Error de ejecución en la línea ' + errorLine;
+
         // Add tween to display text ("Error de ejecución")
         const errorText = this.scene.add.text(
-            300,
-            300,
-            'Error de ejecución',
+            currentColumn * tileSize,
+            currentRow * tileSize,
+            str,
             {
                 fontFamily: 'Arial',
-                fontSize: 24,
-                color: 'red',
+                fontSize: 18,
+                color: 'white',
                 align: 'center',
-                backgroundColor: 'white',
+                backgroundColor: 'red',
                 padding: {
                     top: 5,
                     bottom: 5,
@@ -303,12 +275,12 @@ class Car extends Phaser.GameObjects.Container {
                 },
             }
         );
-    
+
         errorText.setOrigin(0.5);
-    
+
         // Give the text a name so that it can be identified and removed later
         errorText.setName('errorText');
-    
+
         // Add a tween to fade out the error text after a delay
         this.scene.tweens.add({
             targets: errorText,
@@ -318,11 +290,16 @@ class Car extends Phaser.GameObjects.Container {
             onComplete: () => {
                 errorText.destroy(); // Remove the error text after fading out
             },
-            delay: 1000, // Adjust the delay before fading out
+            delay: 5000, // Adjust the delay before fading out
         });
     }
-    
 
+
+    revisarSiGano() {
+        if (currentColumn === finishColumn && currentRow === finishRow) {
+            console.log("Game over");
+        }
+    }
 
 
     avanzar(places) {
@@ -332,122 +309,134 @@ class Car extends Phaser.GameObjects.Container {
         let ease;
         let error;
 
-        switch (currentOrientation) {
+        if (!this.gameOver()) {
 
-            case "north":
+            switch (currentOrientation) {
 
-                error = this.semaforoEnRojo(currentRow - 1, currentColumn) || this.ObstaculoEnfrente();
-                value = error ? 0.6 : 1;
-                ease = error ? 'Linear' : 'Linear';
+                case "north":
+
+                    error = this.semaforoEnRojo(currentRow - 1, currentColumn) || this.ObstaculoEnfrente();
+                    value = error ? 0.6 : 1;
+                    ease = error ? 'Linear' : 'Linear';
 
 
-                this.scene.tweens.add({
-                    targets: this,
-                    y: '-=' + tileSize * value,
-                    ease: ease,
-                    duration: duration,
-                    onComplete: () => {
-                        if (!error) {
-                            currentRow -= 1;
-                            if (places > 1) {
-                                this.avanzar(places - 1);
+                    this.scene.tweens.add({
+                        targets: this,
+                        y: '-=' + tileSize * value,
+                        ease: ease,
+                        duration: duration,
+                        onComplete: () => {
+                            if (!error) {
+                                currentRow -= 1;
+                                if (!this.revisarSiGano()) {
+                                    if (places > 1) {
+                                        this.avanzar(places - 1);
+                                    } else {
+                                        this.siguienteInstruccion();
+                                    }
+                                }
                             } else {
-                                this.siguienteInstruccion();
+                                this.mostrarError();
                             }
-                        } else {
-                            this.MostrarError();
                         }
-                    }
-                });
+                    });
 
 
-                break;
+                    break;
 
-            case "south":
+                case "south":
 
-                error = this.semaforoEnRojo(currentRow + 1, currentColumn) || this.ObstaculoEnfrente();
-                value = error ? 0.6 : 1;
-                ease = error ? 'Linear' : 'Linear';
+                    error = this.semaforoEnRojo(currentRow + 1, currentColumn) || this.ObstaculoEnfrente();
+                    value = error ? 0.6 : 1;
+                    ease = error ? 'Linear' : 'Linear';
 
 
-                this.scene.tweens.add({
-                    targets: this,
-                    y: '+=' + tileSize * value,
-                    ease: ease,
-                    duration: duration,
-                    onComplete: () => {
-                        if (!error) {
-                            currentRow += 1;
-                            if (places > 1) {
-                                this.avanzar(places - 1);
+                    this.scene.tweens.add({
+                        targets: this,
+                        y: '+=' + tileSize * value,
+                        ease: ease,
+                        duration: duration,
+                        onComplete: () => {
+                            if (!error) {
+                                currentRow += 1;
+                                if (!this.revisarSiGano()) {
+                                    if (places > 1) {
+                                        this.avanzar(places - 1);
+                                    } else {
+                                        this.siguienteInstruccion();
+                                    }
+                                }
                             } else {
-                                this.siguienteInstruccion();
+                                this.mostrarError();
                             }
-                        } else {
-                            this.MostrarError();
                         }
-                    }
-                });
+                    });
 
 
-                break;
+                    break;
 
-            case "east":
+                case "east":
 
-                error = this.semaforoEnRojo(currentRow, currentColumn + 1) || this.ObstaculoEnfrente();
-                value = error ? 0.6 : 1;
-                ease = error ? 'Linear' : 'Linear';
+                    error = this.semaforoEnRojo(currentRow, currentColumn + 1) || this.ObstaculoEnfrente();
+                    value = error ? 0.6 : 1;
+                    ease = error ? 'Linear' : 'Linear';
 
 
-                this.scene.tweens.add({
-                    targets: this,
-                    x: '+=' + tileSize * value,
-                    ease: ease,
-                    duration: duration,
-                    onComplete: () => {
-                        if (!error) {
-                            currentColumn += 1;
-                            if (places > 1) {
-                                this.avanzar(places - 1);
+                    this.scene.tweens.add({
+                        targets: this,
+                        x: '+=' + tileSize * value,
+                        ease: ease,
+                        duration: duration,
+                        onComplete: () => {
+                            if (!error) {
+                                currentColumn += 1;
+                                if (!this.revisarSiGano()) {
+                                    if (places > 1) {
+                                        this.avanzar(places - 1);
+                                    } else {
+                                        this.siguienteInstruccion();
+                                    }
+                                }
                             } else {
-                                this.siguienteInstruccion();
+                                this.mostrarError();
                             }
-                        } else {
-                            this.MostrarError();
                         }
-                    }
-                });
+                    });
 
-                break;
+                    break;
 
-            case "west":
+                case "west":
 
-                error = this.semaforoEnRojo(currentRow, currentColumn - 1) || this.ObstaculoEnfrente();
-                value = error ? 0.6 : 1;
-                ease = error ? 'Linear' : 'Linear';
+                    error = this.semaforoEnRojo(currentRow, currentColumn - 1) || this.ObstaculoEnfrente();
+                    value = error ? 0.6 : 1;
+                    ease = error ? 'Linear' : 'Linear';
 
 
-                this.scene.tweens.add({
-                    targets: this,
-                    x: '-=' + tileSize * value,
-                    ease: ease,
-                    duration: duration,
-                    onComplete: () => {
-                        if (!error) {
-                            currentColumn -= 1;
-                            if (places > 1) {
-                                this.avanzar(places - 1);
+                    this.scene.tweens.add({
+                        targets: this,
+                        x: '-=' + tileSize * value,
+                        ease: ease,
+                        duration: duration,
+                        onComplete: () => {
+                            if (!error) {
+                                currentColumn -= 1;
+                                if (!this.revisarSiGano()) {
+                                    if (places > 1) {
+                                        this.avanzar(places - 1);
+                                    } else {
+                                        this.siguienteInstruccion();
+                                    }
+                                }
                             } else {
-                                this.siguienteInstruccion();
+                                this.mostrarError();
                             }
-                        } else {
-                            this.MostrarError();
                         }
-                    }
-                });
+                    });
 
 
-                break;
+                    break;
+            }
+
         }
     }
 
@@ -503,6 +492,72 @@ class Car extends Phaser.GameObjects.Container {
     }
 
 
+    esperar() {
+
+        let semaforoEnRojo = true;
+
+        switch (currentOrientation) {
+            case "east":
+
+                semaforoEnRojo = this.semaforoEnRojo(currentRow, currentColumn + 1);
+
+                if (semaforoEnRojo) {
+                    setTimeout(() => {
+                        this.siguienteInstruccion();
+                    }, colorDuration + 1);
+                } else {
+                    this.siguienteInstruccion();
+
+                }
+
+                break;
+            case "north":
+
+                semaforoEnRojo = this.semaforoEnRojo(currentRow - 1, currentColumn);
+
+                if (semaforoEnRojo) {
+                    setTimeout(() => {
+                        this.siguienteInstruccion();
+                    }, colorDuration + 1);
+                } else {
+                    this.siguienteInstruccion();
+
+                }
+
+                break;
+            case "west":
+
+                semaforoEnRojo = this.semaforoEnRojo(currentRow, currentColumn - 1);
+
+                if (semaforoEnRojo) {
+                    setTimeout(() => {
+                        this.siguienteInstruccion();
+                    }, colorDuration + 1);
+                } else {
+                    this.siguienteInstruccion();
+
+                }
+
+                break;
+            case "south":
+
+                semaforoEnRojo = this.semaforoEnRojo(currentRow + 1, currentColumn);
+
+                if (semaforoEnRojo) {
+                    setTimeout(() => {
+                        this.siguienteInstruccion();
+                    }, colorDuration + 1);
+                } else {
+                    this.siguienteInstruccion();
+
+                }
+
+                break;
+        }
+    }
+
+
+
 }
 
 
@@ -513,6 +568,10 @@ class CarScene extends Phaser.Scene {
     }
 
 
+    startGameOverScene() {
+        this.scene.start("GameOverScene");
+    }
+
 
     preload() {
         this.load.image('car', 'src/assets/images/car.png');
@@ -522,7 +581,6 @@ class CarScene extends Phaser.Scene {
         this.load.image('goal', `src/game/assets/tiles/Grass/road/goal.png`);
 
         this.load.image('start', `src/game/assets/tiles/Grass/road/start.png`);
-
 
 
         this.load.spritesheet('traffic_lights', 'src/assets/tiles/misc/traffic_lights_sprites.png', { frameWidth: 50, frameHeight: 116 });
@@ -665,6 +723,12 @@ class CarScene extends Phaser.Scene {
 
             });
         }
+
+        this.input.once('pointerdown', function () {
+        
+            this.scene.add('gameOverScene', GameOverScene, true, { x: 0, y: 0 });
+
+        }, this);
 
 
     }
