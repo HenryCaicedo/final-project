@@ -8,7 +8,7 @@ import GameOverScene from './GameOverScene';
 console.clear();
 
 
-const map = mapListU1.map01;
+const map = mapListU1.map04;
 
 console.log(map);
 
@@ -735,7 +735,7 @@ class CarScene extends Phaser.Scene {
 }
 
 
-function GameScreen() {
+function GameScreen4() {
     const { instructions: instructionsFromReact } = useContext(InstructionsContext);
 
     useEffect(() => {
@@ -761,4 +761,4 @@ function GameScreen() {
     );
 }
 
-export default GameScreen;
+export default GameScreen4;
