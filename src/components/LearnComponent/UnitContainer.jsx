@@ -102,25 +102,51 @@ function UnitContainer({
 
           <div />
           <div className="flex justify-center align-bottom space-x-4">
-            {[1, 2, 3, 4].map((number) => (
+            
               <Lesson
-                number={number}
-                clickable={allowedLessons.includes(number)}
+                number={1}
+                clickable={"/app"}
               />
-            ))}
-          </div>
-          <div className="flex justify-center align-bottom space-x-4">
-            {[5, 6, 7, 8].map((number) => (
-              <Lesson
-                key={number}
-                number={number}
-                clickable={allowedLessons.includes(number)}
+                          <Lesson
+                number={2}
+                clickable={"/level2"}
+                
               />
-            ))}
+                            <Lesson
+                number={3}
+                clickable={"/level3"}
+              />
+                            <Lesson
+                number={4}
+                clickable={"/level4"}
+              />
+              </div>
+                      <div className="flex justify-center align-bottom space-x-4">
+                      <Lesson
+                number={5}
+                clickable={"/level1"}
+                
+              />
+                            <Lesson
+                number={6}
+                clickable={"/level3"}
+              />
+                            <Lesson
+                number={7}
+                clickable={"/app"}
+              />
+                          <Lesson
+                number={8}
+                clickable={"/level1"}
+                
+              />
+                      </div>
+</div>
           </div>
+
         </div>
-      </div>
-    </div>
+    
+    
   );
 }
 
