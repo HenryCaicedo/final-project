@@ -131,6 +131,8 @@ export default function Driving() {
   function myfunction() {
     // Mientras tanto para solucionar el problema con abrirlo desde progreso.
     window.location.reload();
+    const navigate = useAuthRedirect();
+
   }
   return (
     <div className="flex flex-col h-screen mx-10">

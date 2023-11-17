@@ -104,6 +104,9 @@ function Sidebar({ profileImage, settingsImage }) {
               tooltip="Log out of your account"
               showTooltips={showTooltips}
               route='/'
+              onClick={() =>localStorage.removeItem("token") &&
+                localStorage.removeItem("id") }
+               
               tooltipContent={<div>¿Deseas desconectarte? Haz click aquí</div>}
             />
           </div>
