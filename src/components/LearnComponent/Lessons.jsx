@@ -1,18 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Lesson({ number }) {
+function Lesson({ number, clickable }) {
+  const lessonClassName = `
+    bg-zinc-200 w-[10vh] h-[10vh] rounded-3xl text-5xl flex justify-center items-center border-b-4 border-zinc-400 font-semibold
+    ${
+      clickable
+        ? "text-gray-900 hover:bg-zinc-300"
+        : "text-gray-500 cursor-not-allowed"
+    }
+  `;
+
   return (
-    <Link to='/app'>
-    <button className="
-    bg-zinc-200 w-[10vh] h-[10vh] rounded-3xl text-5xl flex justify-center items-center border-b-4 border-zinc-400 font-semibold text-gray-900
-    hover:bg-zinc-300
-      active:border-b-0 active:h-[10vh]
-    ">
-      {number}
-    </button>
+    <Link to={clickable ? "/app   " : "#"}>
+      <button
+        className={lessonClassName}
+        disabled={!clickable}
+        style={clickable ? {} : { pointerEvents: "none" }}
+      >
+        {number}
+      </button>
     </Link>
-    
   );
 }
 

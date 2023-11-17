@@ -1,8 +1,9 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Lesson from "./Lessons";
 import Guide from "../Tips";
 const activitiesFolderPath = "../game"; // Replace with the actual path
+import Axios from "axios";
 import { Icon } from "@iconify/react";
 
 function UnitContainer({
@@ -22,13 +23,44 @@ function UnitContainer({
   const toggleTips = () => {
     setShowTips(!showTips);
   };
+  const [allowedLessons, setAllowedLessons] = useState([]);
+  const id = localStorage.getItem("id");
   function getJSFilesInFolder(folderPath) {
     // .
     // Queda pendiente discutir si es mejsor esto en progreso o en la pantalla que carga.
     //
     return ["Driving.jsx", "activity1.js"];
   }
+  useEffect(() => {
+    const fetchUserProgress = async () => {
+      try {
+        const response = await Axios.get(
+          `https://api-coderacers.onrender.com/${id}`
+        );
 
+        const data = response.data;
+        const ultimoMapa = data.ultimoMapa;
+        console.log(data);
+        console.log(ultimoMapa);
+        // Assuming 'ultimoMapa' has a property 'nivel'
+        const ultimoMapaNivel = ultimoMapa ? ultimoMapa.nivel : 0;
+
+        // Generate an array of allowed lessons up to 'ultimoMapaNivel + 1'
+        const allowedLessonsArray = Array.from(
+          { length: ultimoMapaNivel + 1 },
+          (_, index) => index + 1
+        );
+
+        setAllowedLessons(allowedLessonsArray);
+
+        console.log("Allowed Lessons:", allowedLessonsArray);
+      } catch (error) {
+        console.error("Error fetching user progress:", error);
+      }
+    };
+
+    fetchUserProgress();
+  }, [id]);
   const renderActivity = (activityName) => {
     const ActivityComponent = lazy(() =>
       import(/* @vite-ignore */ `../game/${activityName}`)
@@ -70,16 +102,21 @@ function UnitContainer({
 
           <div />
           <div className="flex justify-center align-bottom space-x-4">
-            <Lesson number={1} />
-            <Lesson number={2} />
-            <Lesson number={3} />
-            <Lesson number={4} />
+            {[1, 2, 3, 4].map((number) => (
+              <Lesson
+                number={number}
+                clickable={allowedLessons.includes(number)}
+              />
+            ))}
           </div>
-          <div className="flex justify-center  align-bottom space-x-4">
-            <Lesson number={5} />
-            <Lesson number={6} />
-            <Lesson number={7} />
-            <Lesson number={8} />
+          <div className="flex justify-center align-bottom space-x-4">
+            {[5, 6, 7, 8].map((number) => (
+              <Lesson
+                key={number}
+                number={number}
+                clickable={allowedLessons.includes(number)}
+              />
+            ))}
           </div>
         </div>
       </div>
