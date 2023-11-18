@@ -26,19 +26,21 @@ function UnitContainer({
   };
   const [allowedLessons, setAllowedLessons] = useState([]);
   const id = localStorage.getItem("id");
+  const maxLessonNumber = Object.keys(mapListU1).length;
   function getJSFilesInFolder(folderPath) {
     // .
     // Queda pendiente discutir si es mejsor esto en progreso o en la pantalla que carga.
     //
     return ["Driving.jsx", "activity1.js"];
   }
+  let level = "/app"
   useEffect(() => {
     const fetchUserProgress = async () => {
       try {
         const response = await Axios.get(
           `https://api-coderacers.onrender.com/progreso/${id}`
         );
-
+          
         const data = response.data;
         const ultimoMapa = data.ultimoMapa;
         //console.log(data);
@@ -102,60 +104,24 @@ function UnitContainer({
 
           <div />
           <div className="flex justify-center align-bottom space-x-4">
+  {Array.from({ length: maxLessonNumber }, (_, index) => {
+    const lessonNumber = index + 1;
+    const clickable = "/app"; // Replace this with the actual clickable value
+    const map = mapListU1[`map${lessonNumber.toString().padStart(2, '0')}`];
 
-            <Lesson
-              number={1}
-              clickable={"/app"}
-              map={mapListU1.map01}
-            />
-            <Lesson
-              number={2}
-              clickable={"/app"}
-              map={mapListU1.map02}
+    return (
+      <Lesson
+        key={lessonNumber}
+        number={lessonNumber}
+        clickable={clickable}
+        map={map}
+        allowed={allowedLessons.includes(lessonNumber) ? true : false}
+      />
+    );
+  })}
+</div>
+</div>
+</div></div>);}
 
-            />
-            <Lesson
-              number={3}
-              clickable={"/app"}
-              map={mapListU1.map03}
-            />
-            <Lesson
-              number={4}
-              clickable={"/app"}
-              map={mapListU1.map04}
-            />
-          </div>
-          <div className="flex justify-center align-bottom space-x-4">
-            <Lesson
-              number={5}
-              clickable={"/app"}
-              map={mapListU1.map05}
-
-            />
-            <Lesson
-              number={6}
-              clickable={"/app"}
-              map={mapListU1.map06}
-            />
-            <Lesson
-              number={7}
-              clickable={"/app"}
-              map={mapListU1.map07}
-            />
-            <Lesson
-              number={8}
-              clickable={"/app"}
-              map={mapListU1.map08}
-
-            />
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-  );
-}
 
 export default UnitContainer;
