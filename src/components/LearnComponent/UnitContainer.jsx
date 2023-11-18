@@ -35,7 +35,7 @@ function UnitContainer({
     const fetchUserProgress = async () => {
       try {
         const response = await Axios.get(
-          `https://api-coderacers.onrender.com/${id}`
+          `https://api-coderacers.onrender.com/progreso/${id}`
         );
 
         const data = response.data;
