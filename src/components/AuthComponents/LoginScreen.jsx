@@ -64,6 +64,7 @@ export default function LoginScreen() {
         );
       }
       if (error.response.status === 404) {
+        console.log("Usuario no encontrado")
         window.alert(
           "¡Ups! 🙈 Parece que ha habido un pequeño desliz al ingresar los datos. ¡No te preocupes, todos cometemos errores! 🤷‍♂️ Intenta verificar  tu contraseña e ingresarlos nuevamente 💻💪 "
         );

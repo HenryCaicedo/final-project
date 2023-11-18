@@ -100,9 +100,19 @@ export default function SignUp() {
       // Handle errors
       // setIsFailure(true); No tocar por el momento, esta aqui por si luego se deja de usar window.alert.
       console.error("Error:", error);
-      window.alert(
-        "¡Oh no! 🚨 Parece que estamos teniendo problemas para conectar con el servidor. Aquí hay una guía rápida para abordar este percance:\n1. Revisa tu conexión a internet🌐: Asegúrate de estar conectado a una red estable.\n2. Reintenta en unos minutos🕓: A veces, los servidores necesitan un breve descanso.\n"
-      );
+      if (error.response.status === 400) {
+        console.log("Email ya existente");
+        window.alert(
+          "¡Ops! Parece que algo salió mal. 🚫📧 Parece que este correo ya ha sido usado. ¿Seguro que no te registraste antes? Si es así, revisa la dirección de correo electrónico o intenta con otro. ¡No te preocupes, encontrarás el camino correcto! 💡💻 ¡Sigue intentándolo! 🔄💪"
+        );
+      }
+      if (error.response.status === 500) {
+        console.log("Error al crear el usuario");
+        window.alert(
+          "¡Ay, qué pena! 🙊 Algo salió mal en el servidor. 🚫🔄 Intenta nuevamente en un momentito. A veces, hasta los servidores necesitan un descanso breve. 💤💻 ¡No te preocupes, estamos en esto juntos! 🤝 ¡Vamos, inténtalo de nuevo! 🔄💪"
+        );
+      }
+
     }
   };
 
