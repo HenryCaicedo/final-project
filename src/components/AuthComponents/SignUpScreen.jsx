@@ -91,7 +91,7 @@ export default function SignUp() {
       if (response.status === 201) {
         console.log("SignUp successful!");
         // Navigate to the desired location upon successful signup
-        navigate("/progress");
+        navigate("/");
       } else {
         // Log the entire response object to understand the structure
         console.log(response.data);
