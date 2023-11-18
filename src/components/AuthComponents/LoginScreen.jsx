@@ -45,14 +45,40 @@ export default function LoginScreen() {
       } else {
         // Log the entire response object to understand the structure
         console.log(response.data);
+        
       }
     } catch (error) {
       // Handle errors
       // setIsFailure(true); No tocar por el momento, esta aqui por si luego se deja de usar window.alert.
-      console.error("Error:", error);
-      window.alert(
-        "¡Oh no! 🚨 Parece que estamos teniendo problemas para conectar con el servidor. Aquí hay una guía rápida para abordar este percance:\n1. Revisa tu conexión a internet🌐: Asegúrate de estar conectado a una red estable.\n2. Reintenta en unos minutos🕓: A veces, los servidores necesitan un breve descanso.\n"
-      );
+      
+      if (error.response.status === 400) {
+        console.log("Email y contraseña incorrectos");
+        window.alert(
+          "¡Ups! 🙈 Parece que ha habido un pequeño desliz al ingresar los datos. ¡No te preocupes, todos cometemos errores! 🤷‍♂️ Intenta verificar e ingresarlos nuevamente 💻💪 "
+        );
+      }
+      if (error.response.status === 401) {
+        console.log("Contraseña incorrecta");
+        window.alert(
+          "¡Ups! 🙈 Parece que ha habido un pequeño desliz al ingresar los datos. ¡No te preocupes, todos cometemos errores! 🤷‍♂️ Intenta verificar  tu contraseña e ingresarlos nuevamente 💻💪 "
+        );
+      }
+      if (error.response.status === 404) {
+        window.alert(
+          "¡Ups! 🙈 Parece que ha habido un pequeño desliz al ingresar los datos. ¡No te preocupes, todos cometemos errores! 🤷‍♂️ Intenta verificar  tu contraseña e ingresarlos nuevamente 💻💪 "
+        );
+        
+
+      }
+      if (error.response.status === 500) {
+
+        console.log("Error de servidor");
+        window.alert(
+          "¡Ay, qué pena! 🙊 Algo salió mal en el servidor. 🚫🔄 Intenta nuevamente en un momentito. A veces, hasta los servidores necesitan un descanso breve. 💤💻 ¡No te preocupes, estamos en esto juntos! 🤝 ¡Vamos, inténtalo de nuevo! 🔄💪"
+        );
+      // Navigate to the desired location upon successful signup
+
+      }
     }
   };
 
