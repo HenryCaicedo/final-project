@@ -75,9 +75,9 @@ export default function LoginScreen() {
             value={formData.contrasena}
             onChange={(value) => handleInputChange("contrasena", value)}
           />
-          <button onClick={handleLogin} className="w-full">
+          <div onClick={handleLogin} className="w-full">
             <MainButton>Entrar</MainButton>
-          </button>
+          </div>
         </div>
       </div>
     </div>
