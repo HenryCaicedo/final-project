@@ -75,6 +75,88 @@ const mapListU1 = {
       {row: 5, column: 6, orientation: 'east', value: 1, isRed: true },
     ],
   },
+
+  map05: {
+    matrix: [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [2, 4, 0, 3, 2, 2, 2],
+      [0, 1, 0, 1, 0, 0, 0],
+      [0, 1, 0, 1, 0, 0, 0],
+      [0, 1, 0, 1, 2, 0, 0],
+      [0, 5, 2, 6, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+
+    ],
+    type: 1,
+    start: { row: 2, column: 0, orientation: "east" },
+    finish: { row: 7, column: 2, orientation: "south"},
+    stars: { one: 5, two: 10, three: 15 },
+    trafficLights: [
+    ]
+  },
+
+  map06: {
+    matrix: [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 2, 2, 2, 4, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 3, 2, 2, 6, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+
+    ],
+    type: 1,
+    start: { row: 2, column: 0, orientation: "east" },
+    finish: { row: 7, column: 2, orientation: "south"},
+    stars: { one: 5, two: 10, three: 15 },
+    trafficLights: [
+    ]
+  },
+
+
+  map07: {
+    matrix: [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 2, 2, 2, 4, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 3, 2, 2, 6, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+
+    ],
+    type: 1,
+    start: { row: 2, column: 0, orientation: "east" },
+    finish: { row: 7, column: 2, orientation: "south"},
+    stars: { one: 5, two: 10, three: 15 },
+    trafficLights: [
+    ]
+  },
+
+
+  map08: {
+    matrix: [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 2, 2, 2, 4, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 3, 2, 2, 6, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0],
+
+    ],
+    type: 1,
+    start: { row: 2, column: 0, orientation: "east" },
+    finish: { row: 7, column: 2, orientation: "south"},
+    stars: { one: 5, two: 10, three: 15 },
+    trafficLights: [
+    ]
+  },
 };
 
 

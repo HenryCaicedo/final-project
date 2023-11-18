@@ -1,0 +1,15 @@
+// currentMap.jsx
+import mapListU1 from "./maps/unit1";
+
+
+let globalMap = mapListU1.map01;
+
+const setMap = (map) => {
+    globalMap = map;
+}
+
+const getMap = () => {
+    return globalMap;
+}
+
+export { setMap, getMap}

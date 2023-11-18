@@ -5,6 +5,7 @@ import Guide from "../Tips";
 const activitiesFolderPath = "../game"; // Replace with the actual path
 import Axios from "axios";
 import { Icon } from "@iconify/react";
+import mapListU1 from "../../game/maps/unit1";
 
 function UnitContainer({
   title,
@@ -40,8 +41,8 @@ function UnitContainer({
 
         const data = response.data;
         const ultimoMapa = data.ultimoMapa;
-        console.log(data);
-        console.log(ultimoMapa);
+        //console.log(data);
+        //console.log(ultimoMapa);
         // Assuming 'ultimoMapa' has a property 'nivel'
         const ultimoMapaNivel = ultimoMapa ? ultimoMapa.nivel : 0;
 
@@ -53,9 +54,9 @@ function UnitContainer({
 
         setAllowedLessons(allowedLessonsArray);
 
-        console.log("Allowed Lessons:", allowedLessonsArray);
+        //console.log("Allowed Lessons:", allowedLessonsArray);
       } catch (error) {
-        console.error("Error fetching user progress:", error);
+        //console.error("Error fetching user progress:", error);
       }
     };
 
@@ -73,7 +74,6 @@ function UnitContainer({
   };
 
   var str = "bg-sky-500 rounded-3xl py-5 px-7 flex";
-  console.log(str);
 
   return (
     <div>
@@ -102,51 +102,59 @@ function UnitContainer({
 
           <div />
           <div className="flex justify-center align-bottom space-x-4">
-            
-              <Lesson
-                number={1}
-                clickable={"/app"}
-              />
-                          <Lesson
-                number={2}
-                clickable={"/level2"}
-                
-              />
-                            <Lesson
-                number={3}
-                clickable={"/level3"}
-              />
-                            <Lesson
-                number={4}
-                clickable={"/level4"}
-              />
-              </div>
-                      <div className="flex justify-center align-bottom space-x-4">
-                      <Lesson
-                number={5}
-                clickable={"/level1"}
-                
-              />
-                            <Lesson
-                number={6}
-                clickable={"/level3"}
-              />
-                            <Lesson
-                number={7}
-                clickable={"/app"}
-              />
-                          <Lesson
-                number={8}
-                clickable={"/level1"}
-                
-              />
-                      </div>
-</div>
-          </div>
 
+            <Lesson
+              number={1}
+              clickable={"/app"}
+              map={mapListU1.map01}
+            />
+            <Lesson
+              number={2}
+              clickable={"/app"}
+              map={mapListU1.map02}
+
+            />
+            <Lesson
+              number={3}
+              clickable={"/app"}
+              map={mapListU1.map03}
+            />
+            <Lesson
+              number={4}
+              clickable={"/app"}
+              map={mapListU1.map04}
+            />
+          </div>
+          <div className="flex justify-center align-bottom space-x-4">
+            <Lesson
+              number={5}
+              clickable={"/app"}
+              map={mapListU1.map05}
+
+            />
+            <Lesson
+              number={6}
+              clickable={"/app"}
+              map={mapListU1.map06}
+            />
+            <Lesson
+              number={7}
+              clickable={"/app"}
+              map={mapListU1.map07}
+            />
+            <Lesson
+              number={8}
+              clickable={"/app"}
+              map={mapListU1.map08}
+
+            />
+          </div>
         </div>
-    
-    
+      </div>
+
+    </div>
+
+
   );
 }
 

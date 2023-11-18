@@ -1,3 +1,4 @@
+// GameScreen.jsx
 import React, { Component, useContext, useEffect } from 'react';
 import Phaser from 'phaser';
 //import Car from './game/phaser_car'}
@@ -5,29 +6,64 @@ import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
 import GameOverScene from './GameOverScene';
+import { getMap } from './currentMap';
 console.clear();
 
 
-const map = mapListU1.map01;
+var currentMap;
 
-console.log(map);
 
-const matrix = map.matrix;
+export const setCurrentMap = (map) => {
+    currentMap = map;
+
+    matrix = currentMap.matrix;
+
+    // START
+    startRow = currentMap.start.row;
+    startColumn = currentMap.start.column;
+    startOrientation = currentMap.start.orientation;
+
+    // FINISH
+    finishRow = currentMap.finish.row;
+    finishColumn = currentMap.finish.column;
+    finishOrientation = currentMap.finish.orientation;
+
+
+    // SEMÁFORO
+    trafficLightParameters = currentMap.trafficLights;
+    trafficLightObjects = [];
+
+
+    currentRow = startRow;
+    currentColumn = startColumn;
+    currentOrientation = startOrientation;
+    currentInstructionIndex = 0;
+
+    var instructions = [];
+
+    console.log(currentMap);
+}
+
+setCurrentMap(mapListU1.map04);
+
+var matrix = currentMap.matrix;
 
 // START
-const startRow = map.start.row;
-const startColumn = map.start.column;
-const startOrientation = map.start.orientation;
+var startRow = currentMap.start.row;
+var startColumn = currentMap.start.column;
+var startOrientation = currentMap.start.orientation;
 
 // FINISH
-const finishRow = map.finish.row;
-const finishColumn = map.finish.column;
-const finishOrientation = map.finish.orientation;
+var finishRow = currentMap.finish.row;
+var finishColumn = currentMap.finish.column;
+var finishOrientation = currentMap.finish.orientation;
 
 
 // SEMÁFORO
-const trafficLightParameters = map.trafficLights;
-const trafficLightObjects = [];
+var trafficLightParameters = currentMap.trafficLights;
+var trafficLightObjects = [];
+
+
 const yellowDuration = 500;
 const colorDuration = 2000;
 
@@ -45,7 +81,7 @@ const duracionGiro = 900;
 
 var currentOrientation = startOrientation;
 
-let instructions = [];
+var instructions = [];
 
 class TrafficLight extends Phaser.GameObjects.Container {
     constructor(scene, column, row, orientation, side, isRed) {
@@ -725,7 +761,7 @@ class CarScene extends Phaser.Scene {
         }
 
         this.input.once('pointerdown', function () {
-        
+
             this.scene.add('gameOverScene', GameOverScene, true, { x: 0, y: 0 });
 
         }, this);
@@ -735,7 +771,8 @@ class CarScene extends Phaser.Scene {
 }
 
 
-function GameScreen() {
+
+function GameScreen({ map }) {
     const { instructions: instructionsFromReact } = useContext(InstructionsContext);
 
     useEffect(() => {
@@ -760,5 +797,6 @@ function GameScreen() {
         <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
     );
 }
+
 
 export default GameScreen;
