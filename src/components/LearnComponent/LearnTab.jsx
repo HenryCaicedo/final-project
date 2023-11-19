@@ -1,11 +1,12 @@
 import React from "react";
 import UnitContainer from "./UnitContainer";
 import ImageWithTitle from "./ImageWithTitle";
+import TestUnitContainer from "./TestComponents/TestUnitContainer";
 
 export default function LearnTab() {
   return (
     <div className="space-y-6 py-8">
-      <UnitContainer
+      <TestUnitContainer
         title="Unidad 1: Básicos"
         unidad={1}
         color="purple-400"
@@ -45,7 +46,7 @@ export default function LearnTab() {
         }
         videoId="jNQXAC9IVRw"
       />
-      <UnitContainer
+      <TestUnitContainer
         title="Unidad 2: Condicionales"
         color="purple-400"
         unidad={2}
