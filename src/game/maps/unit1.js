@@ -65,7 +65,7 @@ const mapListU1 = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
     type: 1,
-    start: { row: 5, column: 0 , orientation: "east" },
+    start: { row: 5, column: 7 , orientation: "east" },
     finish: { row: 5, column: 9, orientation: "east"},
     stars: { one: 5, two: 10, three: 15 },
     trafficLights: [

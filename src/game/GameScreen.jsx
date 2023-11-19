@@ -225,7 +225,18 @@ class Car extends Phaser.GameObjects.Container {
                 this.ejecutarInstruccion(currentInstructionIndex);
             }
         } else {
-            // Game over scene here
+            console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
+            this.scene.add.particles(0, -50, 'confetti1', {
+                x: { min: 0, max: 800 },
+                quantity: 2,
+                lifespan: 2500,
+                gravityY: 200,
+                scale: 0.02,
+            });
+
+
+            // PONER AQUÍ LO QUE SE DEBA HACER PARA MARCAR UN NIVEL COMO SUPERADO
+
         }
 
         console.log("Game over");
@@ -610,6 +621,8 @@ class CarScene extends Phaser.Scene {
 
 
     preload() {
+        this.load.image('confetti1', 'src/assets/particles/confetti1.png');
+
         this.load.image('car', 'src/assets/images/car.png');
 
         this.load.image('road_stop', 'src/assets/tiles/misc/road_stop.png');
