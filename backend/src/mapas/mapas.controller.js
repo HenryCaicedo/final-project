@@ -17,7 +17,37 @@ export async function createMapa(req, res) {
 
 //Read
 export async function readMapa(req, res) {
-  return res.json({ messge: 'Leer Usuario' });
+  const mapaId = req.params.id;
+
+  try {
+    const mapa = await mapaModel.findById(mapaId);
+
+    if (!mapa) {
+      return res.status(404).json({ message: 'Mapa no encontrado' });
+    }
+
+    return res.status(200).json({mapa});
+  } catch (error) {
+    console.error('Error al leer el mapa:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+
+export async function readMapaLvl(req, res) {
+  const { nivel, unidad } = req.body;
+
+  try {
+    const mapa = await mapaModel.findOne({ nivel, unidad });
+
+    if (!mapa) {
+      return res.status(404).json({ message: 'Mapa no encontrado para el nivel y unidad especificados' });
+    }
+
+    return res.json({ mapaId: mapa._id });
+  } catch (error) {
+    console.error('Error al leer el mapa:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
 }
 
 //Update
