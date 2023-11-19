@@ -1,7 +1,9 @@
-import { CarFront, LogOutIcon } from "lucide-react";
+// Sidebar.jsx
+
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import { CarFront, LogOutIcon } from "lucide-react";
 import { appName } from "./temp";
 
 function SidebarHeader() {
@@ -15,33 +17,43 @@ function SidebarHeader() {
   );
 }
 
-function Tab({ icon, label, showTooltips, tooltipContent, onClick, route }) {
+function Tab({
+  icon,
+  label,
+  showTooltips,
+  tooltipContent,
+  onClick,
+  route,
+  isSelected,
+}) {
+  const tabStyle = isSelected
+    ? "relative group px-4 py-3 flex items-center w-full border-l-4 border-gray-500"
+    : "relative group px-4 py-3 flex items-center w-full hover:bg-zinc-200 hover:rounded-lg";
+
   return (
-    <Link to='/'>
-      <button
-        className="relative group px-4 py-3 flex items-center w-full hover:bg-zinc-200 hover:rounded-lg space-x-2"
-        onClick={onClick}
-      >
-        <div className="text-[4.5vh] text-black mr-4">{icon}</div>
-        <div className="text-xl font-semibold text-black">{label}</div>
-        {showTooltips && (
+    <button className={tabStyle} onClick={onClick}>
+      <div className="text-[4.5vh] text-black mr-4">{icon}</div>
+      <div className="text-xl font-semibold text-black">{label}</div>
+      {showTooltips && (
         <div className="hidden group-hover:block absolute bottom-8 bg-opacity-75 text-xl left-full w-max p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
           {tooltipContent}
         </div>
       )}
-      </button>
-    </Link>
-
+    </button>
   );
 }
 
-function Sidebar({ profileImage, settingsImage }) {
+function Sidebar({ profileImage, settingsImage, onTabChange }) {
   const [showTooltips, setShowTooltips] = useState(false);
-
-
+  const [selectedTab, setSelectedTab] = useState("Learn");
 
   const toggleTooltips = () => {
     setShowTooltips(!showTooltips);
+  };
+
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+    onTabChange(tab);
   };
 
   return (
@@ -61,31 +73,21 @@ function Sidebar({ profileImage, settingsImage }) {
               tooltip="Manage your account settings"
               showTooltips={showTooltips}
               tooltipContent={<div>¡Revisa tu perfil!</div>}
+              onClick={() => handleTabClick("Profile")}
+              isSelected={selectedTab === "Profile"}
             />
             <Tab
               icon={<Icon icon="flat-color-icons:graduation-cap" />}
               label="Learn"
               tooltip="Access learning resources"
               showTooltips={showTooltips}
-              tooltipContent={
-                <div>¡Realiza un seguimiento de tu desempeño!</div>
-              }
-            />
-            <Tab
-              icon={<Icon icon="flat-color-icons:automotive" />}
-              label="Settings"
-              tooltip="Configure application settings"
-              tooltipContent={
-                <div>
-                  ¡Aquí encontrarás opciones que pueden ayudarte a personalizar
-                  tu experiencia!
-                </div>
-              }
-              showTooltips={showTooltips}
+              tooltipContent={<div>¡Realiza un seguimiento de tu desempeño!</div>}
+              onClick={() => handleTabClick("Learn")}
+              isSelected={selectedTab === "Learn"}
             />
             <Tab
               icon={<Icon icon="flat-color-icons:info" />}
-              label="Information"
+              label="Ayuda"
               showTooltips={showTooltips}
               onClick={toggleTooltips}
               tooltipContent={
@@ -93,22 +95,25 @@ function Sidebar({ profileImage, settingsImage }) {
                   ¡Haz click aquí para desactivar las descripciones de ayuda!
                 </div>
               }
+              isSelected={selectedTab === "Ayuda"}
             />
           </div>
         </div>
         <div className="border-t-2 border-gray-200">
           <div className="pt-2">
-            <Tab
-              icon={<LogOutIcon className="mr-2 text-red-500" />}
-              label="Log out"
-              tooltip="Log out of your account"
-              showTooltips={showTooltips}
-              route='/'
-              onClick={() =>localStorage.removeItem("token") &&
-                localStorage.removeItem("id") }
-               
-              tooltipContent={<div>¿Deseas desconectarte? Haz click aquí</div>}
-            />
+            <Link to='/'>
+              <Tab
+                icon={<LogOutIcon className="mr-2 text-red-500" />}
+                label="Log out"
+                tooltip="Log out of your account"
+                showTooltips={showTooltips}
+                route='/'
+                onClick={() => localStorage.removeItem("token") &&
+                  localStorage.removeItem("id")}
+                tooltipContent={<div>¿Deseas desconectarte? Haz click aquí</div>}
+                isSelected={selectedTab === "LogOut"}
+              />
+            </Link>
           </div>
         </div>
       </div>
