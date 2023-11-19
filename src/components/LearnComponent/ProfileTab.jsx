@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Car } from 'lucide-react';
 import axios from 'axios';
-
+import { useNavigate } from "react-router-dom";
 export default function ProfileTab() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   // Para Nombre y Correo Electronico.
@@ -9,11 +9,17 @@ export default function ProfileTab() {
     nombre: '',
     correoElectronico: '',
   });
-  const handleDeleteAccount = () => {
-    // Implement your delete account logic here
-    // You can show the confirmation window before actually deleting the account
-    // For now, let's just log a message to the console
-    console.log('Account deleted!');
+  const navigate = useNavigate();
+  const handleDeleteAccount = async () => {
+    try {
+      const userId = localStorage.getItem("id");
+      const response = await axios.delete(`https://api-coderacers.onrender.com/${userId}`); 
+      navigate("/");
+      console.log("User deleted!")
+    } catch (error) {
+      console.error('Error deleting user data:', error);
+    }
+    
   };
 
   useEffect(() => {
