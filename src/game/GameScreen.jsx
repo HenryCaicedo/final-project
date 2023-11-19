@@ -5,7 +5,6 @@ import Phaser from 'phaser';
 import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
-import GameOverScene from './GameOverScene';
 import { getMap } from './currentMap';
 console.clear();
 
@@ -225,6 +224,10 @@ class Car extends Phaser.GameObjects.Container {
                 this.ejecutarInstruccion(currentInstructionIndex);
             }
         } else {
+
+
+            // Show popup here
+
             console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
             this.scene.add.particles(0, -50, 'confetti1', {
                 x: { min: 0, max: 800 },
@@ -772,13 +775,6 @@ class CarScene extends Phaser.Scene {
 
             });
         }
-
-        this.input.once('pointerdown', function () {
-
-            this.scene.add('gameOverScene', GameOverScene, true, { x: 0, y: 0 });
-
-        }, this);
-
 
     }
 }

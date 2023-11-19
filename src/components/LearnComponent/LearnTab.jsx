@@ -79,9 +79,6 @@ export default function LearnTab() {
           "Para esperar un semáforo, puedes agregar la instrucción de Observar. ¡Usa la instrucción de Avanzar en el momento adecuado!"
         }
       />
-      <UnitContainer title="Unidad 3: Ciclos" color="purple-400" />
-      <UnitContainer title="Unidad 4" />
-      <UnitContainer title="Unidad 5" />
     </div>
   );
 }
