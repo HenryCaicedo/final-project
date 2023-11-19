@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Car } from 'lucide-react';
+import axios from 'axios';
 
 export default function ProfileTab() {
   const [showConfirmation, setShowConfirmation] = useState(false);
-
+  // Para Nombre y Correo Electronico.
+  const [userData, setUserData] = useState({
+    nombre: '',
+    correoElectronico: '',
+  });
   const handleDeleteAccount = () => {
     // Implement your delete account logic here
     // You can show the confirmation window before actually deleting the account
@@ -11,14 +16,31 @@ export default function ProfileTab() {
     console.log('Account deleted!');
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = localStorage.getItem("id");
+        const response = await axios.get(`https://api-coderacers.onrender.com/${userId}`); 
+        const usuario = response.data.usuario;
+        setUserData({
+          nombre: usuario.nombre,
+          correoElectronico: usuario.correoElectronico,
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []); // Run the effect once when the component mounts
   return (
     <div className="flex items-center justify-center flex-col mt-16 space-y-8">
       <div className="bg-blue-400 rounded-full w-32 h-32 flex items-center justify-center">
         <Car size={64} color='black'/>
       </div>
       <div className="mt-6 text-center">
-        <p className="text-4xl font-bold">Nombre de Usuario</p>
-        <p className="text-gray-600 text-2xl">correo@example.com</p>
+        <p className="text-4xl font-bold">{userData.nombre}</p>
+        <p className="text-gray-600 text-2xl">{userData.correoElectronico}</p>
       </div>
 
       <button
