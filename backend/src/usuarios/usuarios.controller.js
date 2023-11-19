@@ -137,7 +137,7 @@ export async function deleteUsuario(req, res) {
 
   try {
     
-    const usuarioEliminado = await UsuarioModel.findByIdAndUpdate(
+    const usuarioEliminado = await userModel.findByIdAndUpdate(
       usuarioId,
       { activo: false },
       { new: true }
