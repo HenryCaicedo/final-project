@@ -7,6 +7,7 @@ export default function LearnTab() {
     <div className="space-y-6 py-8">
       <UnitContainer
         title="Unidad 1: Básicos"
+        unidad={1}
         color="purple-400"
         description={
           "Descubrir los componentes esenciales y palabras claves de esta unidad"
@@ -47,6 +48,7 @@ export default function LearnTab() {
       <UnitContainer
         title="Unidad 2: Condicionales"
         color="purple-400"
+        unidad={2}
         description={
           "Ahora tendrás que tener en cuenta semáforos en tu recorrido"
         }

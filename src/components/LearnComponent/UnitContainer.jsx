@@ -17,6 +17,7 @@ function UnitContainer({
   imageSrc,
   tipImage,
   videoId,
+  unidad
 }) {
   const jsFiles = getJSFilesInFolder(activitiesFolderPath);
   const [showTips, setShowTips] = useState(false);
@@ -111,6 +112,7 @@ function UnitContainer({
 
     return (
       <Lesson
+        unidad={unidad}
         key={lessonNumber}
         number={lessonNumber}
         clickable={clickable}
