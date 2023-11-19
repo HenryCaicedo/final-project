@@ -6,6 +6,7 @@ import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
 import { getMap } from './currentMap';
+import axios from 'axios';
 console.clear();
 
 
@@ -214,7 +215,7 @@ class Car extends Phaser.GameObjects.Container {
 
     }
 
-    siguienteInstruccion() {
+    async siguienteInstruccion() {
 
         if (!this.gameOver()) {
 
@@ -229,22 +230,67 @@ class Car extends Phaser.GameObjects.Container {
             // Show popup here
 
             console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
-            this.scene.add.particles(0, -50, 'confetti1', {
-                x: { min: 0, max: 800 },
-                quantity: 2,
-                lifespan: 2500,
-                gravityY: 200,
-                scale: 0.02,
-            });
-
-
-            // PONER AQUÍ LO QUE SE DEBA HACER PARA MARCAR UN NIVEL COMO SUPERADO
-
-        }
-
-        console.log("Game over");
-    }
-
+            
+            try {
+                console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
+          
+                const userId = localStorage.getItem("id");
+                const unidad = localStorage.getItem("unidad");
+                console.log(unidad);
+                const nivel = localStorage.getItem("nivel");
+                console.log(nivel);
+          
+                const response1 = await axios.post(
+                  "https://api-coderacers.onrender.com/mapa/read",
+                  {
+                    unidad: unidad,
+                    nivel: nivel,
+                  }
+                );
+          
+                console.log(response1);
+          
+                const mapaId = response1.data.mapaId;
+          
+                localStorage.setItem("mapaId", mapaId);
+          
+                const requestBody = {
+                  nuevoMapaId: mapaId,
+                };
+          
+                console.log(mapaId);
+                console.log("El axios");
+          
+                const response2 = await axios.patch(
+                  `https://api-coderacers.onrender.com/${userId}`,
+                  requestBody
+                );
+          
+                console.log(
+                  "Mapa añadido al progreso del usuario:",
+                  response2.data.usuarioActualizado
+                );
+          
+                // Continue with the rest of your code
+                this.scene.add.particles(0, -50, 'confetti1', {
+                  x: { min: 0, max: 800 },
+                  quantity: 2,
+                  lifespan: 2500,
+                  gravityY: 200,
+                  scale: 0.02,
+                });
+          
+                // PONER AQUÍ LO QUE SE DEBA HACER PARA MARCAR UN NIVEL COMO SUPERADO
+              } catch (error) {
+                console.error(
+                  "Error:",
+                  error.response ? error.response.data.message : error.message
+                );
+              }
+            }
+          
+            console.log("Game over");
+          }
 
     gameOver() {
         if (currentRow === finishRow && currentColumn === finishColumn) {
@@ -806,6 +852,34 @@ function GameScreen({ map }) {
         <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
     );
 }
-
+async function fetchData() {
+    try {
+      const userId = localStorage.getItem("id");
+      const unidad = localStorage.getItem("unidad");
+      console.log(unidad);
+      const nivel = localStorage.getItem("nivel");
+      console.log(nivel);
+      const response1 = await axios.post(
+        "https://api-coderacers.onrender.com/mapa/read",
+        {
+          unidad: unidad,
+          nivel: nivel,
+        }
+      );
+      console.log(response1);
+      localStorage.setItem("mapaId", response1.data.mapaId);
+      const requestBody = {
+        nuevoMapaId: mapaId,
+      };
+  
+      console.log(mapaId);
+      console.log("El axios");
+  
+      const response2 = await axios.patch(`https://api-coderacers.onrender.com/${userId}`, requestBody);
+  
+      console.log('Mapa añadido al progreso del usuario:', response2.data.usuarioActualizado);
+    } catch (error) {
+      console.error('Error:', error.response ? error.response.data.message : error.message);
+    }}
 
 export default GameScreen;
