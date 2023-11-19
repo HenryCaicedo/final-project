@@ -8,7 +8,7 @@ import ProfileTab from "./LearnComponent/ProfileTab.jsx";
 
 function Progress() {
   const navigate = useAuthRedirect();
-  const [selectedTab, setSelectedTab] = useState("Learn");
+  const [selectedTab, setSelectedTab] = useState("Aprender");
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -27,8 +27,8 @@ function Progress() {
       </div>
       <div className="w-full sm:w-2/3 md:w-3/4 lg:w-7/10">
         <div style={{ height: "100vh" }}>
-          <TabContent title={selectedTab === "Profile" ? "Profile" : "Learn"}>
-            {selectedTab === "Profile" ? <ProfileTab /> : <LearnTab />}
+          <TabContent title={selectedTab === "Mi cuenta" ? "Mi cuenta" : "Aprender"}>
+            {selectedTab === "Mi cuenta" ? <ProfileTab /> : <LearnTab />}
           </TabContent>
         </div>
       </div>

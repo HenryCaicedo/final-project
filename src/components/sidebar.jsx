@@ -45,7 +45,7 @@ function Tab({
 
 function Sidebar({ profileImage, settingsImage, onTabChange }) {
   const [showTooltips, setShowTooltips] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("Learn");
+  const [selectedTab, setSelectedTab] = useState("Aprender");
 
   const toggleTooltips = () => {
     setShowTooltips(!showTooltips);
@@ -73,17 +73,17 @@ function Sidebar({ profileImage, settingsImage, onTabChange }) {
               tooltip="Manage your account settings"
               showTooltips={showTooltips}
               tooltipContent={<div>¡Revisa tu perfil!</div>}
-              onClick={() => handleTabClick("Profile")}
-              isSelected={selectedTab === "Profile"}
+              onClick={() => handleTabClick("Mi cuenta")}
+              isSelected={selectedTab === "Mi cuenta"}
             />
             <Tab
               icon={<Icon icon="flat-color-icons:graduation-cap" />}
-              label="Learn"
+              label="Aprender"
               tooltip="Access learning resources"
               showTooltips={showTooltips}
               tooltipContent={<div>¡Realiza un seguimiento de tu desempeño!</div>}
-              onClick={() => handleTabClick("Learn")}
-              isSelected={selectedTab === "Learn"}
+              onClick={() => handleTabClick("Aprender")}
+              isSelected={selectedTab === "Aprender"}
             />
             <Tab
               icon={<Icon icon="flat-color-icons:info" />}
