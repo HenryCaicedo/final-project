@@ -7,7 +7,7 @@ import axios from "axios";
 import { MainButton } from "../Theme/ThemeComponents";
 
 export default function SignUp() {
-  
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     correoElectronico: "", // Ensure this has a default value (e.g., "")
@@ -90,8 +90,9 @@ export default function SignUp() {
 
       if (response.status === 201) {
         console.log("SignUp successful!");
+        setShowConfirmation(true);
         // Navigate to the desired location upon successful signup
-        navigate("/");
+       
       } else {
         // Log the entire response object to understand the structure
         console.log(response.data);
@@ -162,6 +163,27 @@ export default function SignUp() {
               Ha ocurrido un error al crear el usuario.
             </div>
           ) : null} -- No tocar por el momento, esta aqui por si luego se deja de usar window.alert.*/}
+
+
+
+      {showConfirmation && (
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-md">
+            <p className="text-2xl mb-4 text-black">¡Enhorabuena! 🎉🌟 Tu cuenta ha sido creada exitosamente. <br/> ¡Bienvenido al equipo! 🚀✨ <br/>Ahora, estás listo para explorar y disfrutar de todas las increíbles experiencias que te esperan. 🌍💻<br/> ¡Que comience la aventura! 🎊🔐 #NuevoComienzo ¡Enhorabuena por este emocionante paso! 🥳👏</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-green-500 text-white px-4 py-2 mr-2 rounded"
+                onClick={() => {
+                  setShowConfirmation(false);
+                  navigate("/login");
+                }}
+              >
+                ¡Gracias! 🌟
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
         </div>
       </div>
     </div>
