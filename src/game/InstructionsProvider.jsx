@@ -6,6 +6,18 @@ export function InstructionsProvider({ children }) {
   const [instructions, setInstructions] = useState([]);
 
   const addInstruction = (newInstruction) => {
+    console.log(instructions)
+    if (instructions.length > 0 && newInstruction.type === 'forward'  && instructions[instructions.length - 1].type === "forward"){
+      setInstructions((prevInstructions) =>
+      prevInstructions.map((instruction) =>
+          instruction.id === instructions[instructions.length - 1].id
+          ? { ...instruction, value: instruction.value + 1 }
+          : instruction
+      )
+      
+    );
+    return;
+    }
     setInstructions([...instructions, newInstruction]);
   };
 
