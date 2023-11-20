@@ -69,7 +69,7 @@ function Sidebar({ profileImage, settingsImage, onTabChange }) {
           <div className="px-5">
             <Tab
               icon={<Icon icon="flat-color-icons:businesswoman" />}
-              label="My account"
+              label="Mi cuenta"
               tooltip="Manage your account settings"
               showTooltips={showTooltips}
               tooltipContent={<div>¡Revisa tu perfil!</div>}
