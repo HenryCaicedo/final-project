@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
 import GameScreen from "./GameScreen";
 import DndComponent from "./Dnd";
-import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle, Eye } from "lucide-react";
+import { X, ChevronsRight, CornerUpRight, CornerUpLeft, TimerReset, Banana, Play, StopCircle, Eye, HelpCircle } from "lucide-react";
 import InstructionsContext, { InstructionsProvider } from "./InstructionsProvider";
 import newGuid from "../utils/newGuid";
 
@@ -11,11 +11,20 @@ import newGuid from "../utils/newGuid";
 
 function CloseButton() {
   return (
-    <Link to="/progress">  {/* Use the Link component with the "to" attribute */}
+    <Link to="/progress">
       <button className="p-3 border-gray-400 border-2 rounded-full hover:bg-gray-200 focus:bg-gray-300">
         <X color='gray' size={32} />
       </button>
     </Link>
+  )
+
+}
+
+function HelpButton() {
+  return (
+    <button className="p-3 border-gray-400 border-2 rounded-full hover:bg-gray-200 focus:bg-gray-300">
+      <HelpCircle color='gray' size={32} />
+    </button>
   )
 
 }
@@ -72,6 +81,7 @@ function NavBar() {
       <div className="flex-1 flex justify-center items-center">
         <InstructionToolBox />
       </div>
+      <HelpButton />
     </nav>
   );
 }
@@ -94,7 +104,7 @@ function CodePanel() {
     <div className="bg-white w-full flex flex-col h-[80vh] border-2 border-gray-300 rounded-3xl">
       <div className="flex-1">
 
-      <RunCodeBar />
+        <RunCodeBar />
       </div>
       <div className="w-full  h-full overflow-auto">
         <DndComponent />

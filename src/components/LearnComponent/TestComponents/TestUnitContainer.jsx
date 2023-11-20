@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 
 function TestUnitContainer({
   title,
-  color = "purple-500",
+  color = "bg-purple-500",
   unidad,
   description,
   content,

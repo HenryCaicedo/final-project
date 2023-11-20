@@ -5,8 +5,8 @@ import Phaser from 'phaser';
 import mapListU1 from './maps/unit1';
 import { fromJSON } from 'postcss';
 import InstructionsContext from './InstructionsProvider';
-import { getMap } from './currentMap';
 import axios from 'axios';
+import { setMap, globalMap } from './currentMap';
 console.clear();
 
 
@@ -44,7 +44,7 @@ export const setCurrentMap = (map) => {
     console.log(currentMap);
 }
 
-setCurrentMap(mapListU1.map04);
+setCurrentMap(globalMap);
 
 var matrix = currentMap.matrix;
 
@@ -186,6 +186,9 @@ class Car extends Phaser.GameObjects.Container {
         this.add(carImg)
         this.instructions = instructions;
 
+
+        console.log(currentOrientation);
+
         this.body = carImg;
 
         scene.add.existing(this);
@@ -227,70 +230,63 @@ class Car extends Phaser.GameObjects.Container {
         } else {
 
 
-            // Show popup here
+            this.scene.add.particles(0, -50, 'confetti1', {
+                x: { min: 0, max: 800 },
+                quantity: 2,
+                lifespan: 2500,
+                gravityY: 200,
+                scale: 0.02,
+            });
 
-            console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
-            
+
             try {
-                console.log("GANASTEEEEEEEEEEEEEEEEEEEEEEE");
-          
+
                 const userId = localStorage.getItem("id");
                 const unidad = localStorage.getItem("unidad");
                 console.log(unidad);
                 const nivel = localStorage.getItem("nivel");
                 console.log(nivel);
-          
+
                 const response1 = await axios.post(
-                  "https://api-coderacers.onrender.com/mapa/read",
-                  {
-                    unidad: unidad,
-                    nivel: nivel,
-                  }
+                    "https://api-coderacers.onrender.com/mapa/read",
+                    {
+                        unidad: unidad,
+                        nivel: nivel,
+                    }
                 );
-          
+
                 console.log(response1);
-          
+
                 const mapaId = response1.data.mapaId;
-          
+
                 localStorage.setItem("mapaId", mapaId);
-          
+
                 const requestBody = {
-                  nuevoMapaId: mapaId,
+                    nuevoMapaId: mapaId,
                 };
-          
+
                 console.log(mapaId);
                 console.log("El axios");
-          
+
                 const response2 = await axios.patch(
-                  `https://api-coderacers.onrender.com/${userId}`,
-                  requestBody
+                    `https://api-coderacers.onrender.com/${userId}`,
+                    requestBody
                 );
-          
+
                 console.log(
-                  "Mapa añadido al progreso del usuario:",
-                  response2.data.usuarioActualizado
+                    "Mapa añadido al progreso del usuario:",
+                    response2.data.usuarioActualizado
                 );
-          
-                // Continue with the rest of your code
-                this.scene.add.particles(0, -50, 'confetti1', {
-                  x: { min: 0, max: 800 },
-                  quantity: 2,
-                  lifespan: 2500,
-                  gravityY: 200,
-                  scale: 0.02,
-                });
-          
-                // PONER AQUÍ LO QUE SE DEBA HACER PARA MARCAR UN NIVEL COMO SUPERADO
-              } catch (error) {
+            } catch (error) {
                 console.error(
-                  "Error:",
-                  error.response ? error.response.data.message : error.message
+                    "Error:",
+                    error.response ? error.response.data.message : error.message
                 );
-              }
             }
-          
-            console.log("Game over");
-          }
+        }
+
+        console.log("Game over");
+    }
 
     gameOver() {
         if (currentRow === finishRow && currentColumn === finishColumn) {
@@ -400,6 +396,7 @@ class Car extends Phaser.GameObjects.Container {
 
     avanzar(places) {
 
+
         const duration = carSpeed;
         let value;
         let ease;
@@ -441,6 +438,8 @@ class Car extends Phaser.GameObjects.Container {
                     break;
 
                 case "south":
+
+                    console.log("AVANZANDO EN DIRECCIÓN", currentOrientation);
 
                     error = this.semaforoEnRojo(currentRow + 1, currentColumn) || this.ObstaculoEnfrente();
                     value = error ? 0.6 : 1;
@@ -532,7 +531,6 @@ class Car extends Phaser.GameObjects.Container {
 
                     break;
             }
-
         }
     }
 
@@ -705,7 +703,7 @@ class CarScene extends Phaser.Scene {
     // Draws the background grass
     drawBackground() {
         for (let i = 0; i <= matrix[0].length; i++) {
-            for (let j = 0; j <= matrix[0].length; j++) {
+            for (let j = 0; j <= matrix.length; j++) {
                 // Generate a random number between 0 and 1
                 const randomNumber = Math.random();
                 // Use the random number to choose between the two images
@@ -811,7 +809,7 @@ class CarScene extends Phaser.Scene {
 
                 currentRow = startRow;
                 currentColumn = startColumn;
-                currentOrientation = 'east';
+                currentOrientation = startOrientation;
                 currentInstructionIndex = 0;
 
                 if (instructions.length > 0) {
@@ -854,32 +852,33 @@ function GameScreen({ map }) {
 }
 async function fetchData() {
     try {
-      const userId = localStorage.getItem("id");
-      const unidad = localStorage.getItem("unidad");
-      console.log(unidad);
-      const nivel = localStorage.getItem("nivel");
-      console.log(nivel);
-      const response1 = await axios.post(
-        "https://api-coderacers.onrender.com/mapa/read",
-        {
-          unidad: unidad,
-          nivel: nivel,
-        }
-      );
-      console.log(response1);
-      localStorage.setItem("mapaId", response1.data.mapaId);
-      const requestBody = {
-        nuevoMapaId: mapaId,
-      };
-  
-      console.log(mapaId);
-      console.log("El axios");
-  
-      const response2 = await axios.patch(`https://api-coderacers.onrender.com/${userId}`, requestBody);
-  
-      console.log('Mapa añadido al progreso del usuario:', response2.data.usuarioActualizado);
+        const userId = localStorage.getItem("id");
+        const unidad = localStorage.getItem("unidad");
+        console.log(unidad);
+        const nivel = localStorage.getItem("nivel");
+        console.log(nivel);
+        const response1 = await axios.post(
+            "https://api-coderacers.onrender.com/mapa/read",
+            {
+                unidad: unidad,
+                nivel: nivel,
+            }
+        );
+        console.log(response1);
+        localStorage.setItem("mapaId", response1.data.mapaId);
+        const requestBody = {
+            nuevoMapaId: mapaId,
+        };
+
+        console.log(mapaId);
+        console.log("El axios");
+
+        const response2 = await axios.patch(`https://api-coderacers.onrender.com/${userId}`, requestBody);
+
+        console.log('Mapa añadido al progreso del usuario:', response2.data.usuarioActualizado);
     } catch (error) {
-      console.error('Error:', error.response ? error.response.data.message : error.message);
-    }}
+        console.error('Error:', error.response ? error.response.data.message : error.message);
+    }
+}
 
 export default GameScreen;

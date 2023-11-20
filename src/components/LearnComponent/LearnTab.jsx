@@ -47,6 +47,7 @@ export default function LearnTab() {
         videoId="jNQXAC9IVRw"
       />
       <UnitContainer
+        unitNumber={2}
         title="Unidad 2: Condicionales"
         color="purple-400"
         unidad={2}
