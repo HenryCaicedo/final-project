@@ -37,7 +37,10 @@ const instructionDictionary = {
     style: {background: "bg-orange-50", border: "border-orange-200" }
   },
 };
-
+function findIndex({id}){
+  const { getInstructionIndexById } = useContext(InstructionsContext);
+  return getInstructionIndexById(id);
+}
 function ValueCounter({ value, instructionId, onMouseEnter, onMouseLeave }) {
   const style = "hover:bg-gray-300 rounded";
   const { updateInstructionValue } = useContext(InstructionsContext);
@@ -148,6 +151,7 @@ function Instruction({ user: instruction }) {
           `flex ${bgColor} ${borderColor} rounded-2xl py-2 px-5 h-[50px] font-semibold text-lg items-center border-[3px] overflow-hidden relative`
         }
       >
+        {findIndex(instruction)}
         <div className="w-[10%]">
           {isParentHovered ? (
             <GripHorizontal />) : (icon)}

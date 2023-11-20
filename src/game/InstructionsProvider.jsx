@@ -30,7 +30,7 @@ export function InstructionsProvider({ children }) {
     );
   };
 
-  const updateInstructionValue = (instructionId, amount) => {
+  const updateInstructionValue = (instructionId) => {
     setInstructions((prevInstructions) =>
       prevInstructions.map((instruction) =>
         instruction.id === instructionId
@@ -39,10 +39,15 @@ export function InstructionsProvider({ children }) {
       )
     );
   };
+  function getInstructionIndexById  (instructionId)  {
+    const foundIndex = instructions.findIndex((instruction) => instruction.id === instructionId);
+    return foundIndex;
+  };
+  
 
   return (
     <InstructionsContext.Provider
-      value={{ instructions, setInstructions, addInstruction, removeInstruction, updateInstructionValue }}
+      value={{ instructions, setInstructions, addInstruction, removeInstruction, updateInstructionValue, getInstructionIndexById }}
     >
       {children}
     </InstructionsContext.Provider>
