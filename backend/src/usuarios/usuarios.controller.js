@@ -36,7 +36,7 @@ export async function loginUsuario(req, res) {
 
     const user = await userModel.findOne({ correoElectronico });
 
-    if (!user) {
+    if (!user||!user.activo) {
       return res.status(404).json({ message: 'User not found.' });
     }
     const passwordMatch = await bcrypt.compare(contrasena, user.contrasena);
