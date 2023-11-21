@@ -10,6 +10,16 @@ import { setMap, globalMap } from './currentMap';
 console.clear();
 
 
+const PopupComponent = ({ onClose }) => {
+    return (
+      <div className="popup">
+        <p>Congratulations! You completed the level.</p>
+        <button onClick={onClose}>Continue to the next level</button>
+      </div>
+    );
+  };
+  
+
 var currentMap;
 
 
@@ -229,6 +239,7 @@ class Car extends Phaser.GameObjects.Container {
             }
         } else {
 
+            // Display POPUP
 
             this.scene.add.particles(0, -50, 'confetti1', {
                 x: { min: 0, max: 800 },
@@ -350,8 +361,8 @@ class Car extends Phaser.GameObjects.Container {
 
         // Add tween to display text ("Error de ejecución")
         const errorText = this.scene.add.text(
-            currentColumn * tileSize,
-            currentRow * tileSize,
+            matrix.length/2 * tileSize,
+            matrix[0].length/2 * tileSize,
             str,
             {
                 fontFamily: 'Arial',
@@ -370,19 +381,17 @@ class Car extends Phaser.GameObjects.Container {
 
         errorText.setOrigin(0.5);
 
-        // Give the text a name so that it can be identified and removed later
         errorText.setName('errorText');
 
-        // Add a tween to fade out the error text after a delay
         this.scene.tweens.add({
             targets: errorText,
             alpha: 0,
-            duration: 2000, // Adjust the duration as needed
+            duration: 2000, 
             ease: 'Linear',
             onComplete: () => {
-                errorText.destroy(); // Remove the error text after fading out
+                errorText.destroy();
             },
-            delay: 5000, // Adjust the delay before fading out
+            delay: 5000,
         });
     }
 
@@ -850,6 +859,8 @@ function GameScreen({ map }) {
         <div id="phaser-container" className='rounded-[5vh] border-[6px] overflow-hidden'></div>
     );
 }
+
+
 async function fetchData() {
     try {
         const userId = localStorage.getItem("id");

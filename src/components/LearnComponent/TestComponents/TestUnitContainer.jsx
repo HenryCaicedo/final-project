@@ -40,14 +40,12 @@ function TestUnitContainer({
     );
   };
 
-  var str = "bg-sky-500 rounded-3xl py-5 px-7 flex";
-  console.log(str);
 
   return (
     <div>
       <div className="flex items-center justify-center">
         <div className="flex border shadow-md p-10 flex-col space-y-2 rounded-[45px] bg-zinc-50">
-          <div className={str}>
+          <div className={`${color} rounded-3xl py-5 px-7 flex items-center space-x-4`}>
             <h2 className="text-white text-2xl font-semibold font-['Open Sans']">
               {title}
             </h2>
