@@ -30,14 +30,15 @@ export function InstructionsProvider({ children }) {
     );
   };
 
-  const updateInstructionValue = (instructionId) => {
+  const updateInstructionValue = (instructionId, amount) => {
+    if (amount + instructions.find((instruction) => instruction.id === instructionId).value>= 1){
     setInstructions((prevInstructions) =>
       prevInstructions.map((instruction) =>
         instruction.id === instructionId
           ? { ...instruction, value: instruction.value + amount }
           : instruction
       )
-    );
+    );}
   };
   function getInstructionIndexById  (instructionId)  {
     const foundIndex = instructions.findIndex((instruction) => instruction.id === instructionId);
