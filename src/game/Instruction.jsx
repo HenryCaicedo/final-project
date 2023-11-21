@@ -151,7 +151,7 @@ function Instruction({ user: instruction }) {
           `flex ${bgColor} ${borderColor} rounded-2xl py-2 px-5 h-[50px] font-semibold text-lg items-center border-[3px] overflow-hidden relative`
         }
       >
-        {findIndex(instruction)}
+        {findIndex(instruction)+1}
         <div className="w-[10%]">
           {isParentHovered ? (
             <GripHorizontal />) : (icon)}
